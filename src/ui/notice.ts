@@ -9,6 +9,7 @@ export function createNotice(root: HTMLElement): void {
   notice.className = 'notice';
   notice.innerHTML =
     '行星距離經 √ 比例壓縮（非等比）；行星大小為示意。<br>' +
-    '星曆：astronomy-engine（高精度範圍 1700–2200 年，範圍外為推算值）。';
+    '星曆：astronomy-engine（高精度範圍 1700–2200 年，範圍外為推算值）。<br>' +
+    '彗星為二體克卜勒推算（未含攝動），離曆元越遠誤差越大。';
   root.appendChild(notice);
 }

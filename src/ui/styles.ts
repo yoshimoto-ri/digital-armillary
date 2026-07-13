@@ -12,9 +12,26 @@ export function injectStyles(): void {
   .label-planet-modern { color: #9fc8e8; }
   .label-undiscovered { opacity: 0.45; }
   .label-undiscovered::after { content: '（尚未發現）'; font-size: 10px; }
+  .label-zodiac {
+    color: #a894d8; font-size: 12px; text-shadow: 0 0 4px #000;
+    user-select: none; white-space: nowrap; opacity: 0.85;
+  }
+  .label-equinox {
+    color: #e8c860; font-size: 12px; text-shadow: 0 0 4px #000;
+    user-select: none; white-space: nowrap;
+  }
+  .label-comet {
+    color: #b8e8e0; font-size: 11px; text-shadow: 0 0 4px #000;
+    user-select: none; white-space: nowrap; opacity: 0.9;
+  }
 
+  .bottom-stack {
+    position: absolute; left: 0; right: 0; bottom: 14px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    pointer-events: none;
+  }
+  .bottom-stack > * { pointer-events: auto; }
   .control-bar {
-    position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%);
     display: flex; gap: 14px; align-items: center; flex-wrap: wrap; justify-content: center;
     background: rgba(8, 12, 26, 0.82); border: 1px solid #223050; border-radius: 10px;
     padding: 8px 16px; backdrop-filter: blur(4px); max-width: min(96vw, 900px);
@@ -30,6 +47,26 @@ export function injectStyles(): void {
     padding: 4px 12px; cursor: pointer; font-family: inherit; font-size: 13px;
   }
   .control-bar button:hover { background: #24365e; }
+  .mode-switch { display: inline-flex; border: 1px solid #2a3a5a; border-radius: 6px; overflow: hidden; }
+  .mode-switch button { border: none; border-radius: 0; background: #0c1224; }
+  .mode-switch button.active { background: #3a5a96; color: #fff; }
+
+  .timeline-bar {
+    display: flex; gap: 10px; align-items: center;
+    background: rgba(8, 12, 26, 0.82); border: 1px solid #223050; border-radius: 10px;
+    padding: 6px 14px; backdrop-filter: blur(4px); width: min(92vw, 720px);
+  }
+  .timeline-bar button.play {
+    background: #1a2846; color: #c8d2e8; border: 1px solid #2a3a5a; border-radius: 5px;
+    padding: 4px 10px; cursor: pointer; font-family: inherit; font-size: 13px; white-space: nowrap;
+  }
+  .timeline-bar button.play:hover { background: #24365e; }
+  .timeline-bar select {
+    background: #0c1224; color: #c8d2e8; border: 1px solid #2a3a5a; border-radius: 5px;
+    padding: 3px 4px; font-family: inherit; font-size: 12px;
+  }
+  .timeline-bar input[type="range"] { flex: 1; accent-color: #4a7ab8; min-width: 120px; }
+  .timeline-bar .year-readout { font-size: 12px; color: #a8b6d0; white-space: nowrap; min-width: 7.5em; text-align: right; }
 
   .sidebar {
     position: absolute; top: 14px; right: 14px; width: 230px;
@@ -59,7 +96,7 @@ export function injectStyles(): void {
   .app-title small { display: block; font-size: 10px; color: #5a6680; letter-spacing: 1px; margin-top: 2px; }
 
   @media (max-width: 640px) {
-    .sidebar { width: auto; left: 14px; right: 14px; top: auto; bottom: 70px; }
+    .sidebar { width: auto; left: 14px; right: 14px; top: auto; bottom: 130px; }
     .control-bar { gap: 8px; font-size: 12px; padding: 6px 10px; }
   }
   `;

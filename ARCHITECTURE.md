@@ -10,8 +10,9 @@
 
 - **日心視角**（階段一）：上帝視角俯瞰太陽系，天球為背景。
 - **地心視角／渾象模式**（階段二）：從地球球心向外看天球內面，重現古代觀測者視角。
-- **時間軸與歲差**（階段三）：西元前 1000 年至西元 5000 年，可視化恆星黃道（二十八宿）
-  與回歸黃道（十二宮）的相對漂移，含哈雷彗星軌道。
+- **時間軸與歲差**（原階段三，時間軸與彗星已提前於階段二交付）：西元前 1000 年至
+  西元 5000 年，可視化恆星黃道（二十八宿）與回歸黃道（十二宮）的相對漂移，
+  含哈雷等彗星軌道；歲差對照環為剩餘項目。
 
 ## 2. 技術棧
 
@@ -62,21 +63,22 @@ digital-armillary/
     │   ├── retrograde.ts    #   順行/逆行判定
     │   ├── mansions.ts      #   黃經→所在宿、宿界計算
     │   ├── zodiac.ts        #   黃經→所在宮（回歸黃道等分）
-    │   └── halley.ts        #   哈雷彗星克卜勒傳播（見 §7.4）
+    │   └── comets.ts        #   彗星克卜勒傳播（見 §7.4）
     ├── data/                # 資料層
     │   ├── types.ts         #   所有 JSON 的 TypeScript 介面
     │   ├── mansions.json    #   二十八宿距星表（§6.1）
     │   ├── mansionStars.json#   各宿星官亮星（§6.2）
     │   ├── zodiacNames.ts   #   十二宮中文名（純常數，不需 JSON）
     │   ├── planets.ts       #   七曜清單（名稱、顏色、渲染半徑等常數）
-    │   └── halley.ts        #   哈雷彗星軌道根數常數
+    │   └── comets.ts        #   彗星軌道根數常數（哈雷、恩克、斯威夫特–塔特爾、海爾–博普）
     ├── state/
     │   └── store.ts         #   集中狀態 + 簡易 pub/sub（無外部依賴）
     ├── scene/               # 渲染層
     │   ├── engine.ts        #   renderer、camera、requestAnimationFrame 迴圈
     │   ├── celestialSphere.ts #  天球：恆星 Points、宿連線、宿名標籤
-    │   ├── planets.ts       #   七曜 Mesh 與位置更新
-    │   ├── orbits.ts        #   軌道線（含哈雷橢圓軌道）
+    │   ├── planets.ts       #   七曜 Mesh 與位置更新（日心壓縮／地心投影天球面）
+    │   ├── orbits.ts        #   行星軌道線
+    │   ├── comets.ts        #   彗星本體與軌道線
     │   ├── overlays.ts      #   黃道線、天赤道線、春分點、十二宮分區
     │   ├── labels.ts        #   文字標籤（CSS2DRenderer）
     │   ├── scale.ts         #   距離壓縮比例尺（§7.5）
@@ -84,9 +86,8 @@ digital-armillary/
     │       ├── helioMode.ts #   日心視角（階段一）
     │       └── geoMode.ts   #   地心視角（階段二）
     └── ui/                  # UI 控制層
-        ├── controlBar.ts    #   底部控制列（視角切換、圖層開關）
-        ├── datePicker.ts    #   日期選擇器
-        ├── timeline.ts      #   時間軸播放控制（階段三）
+        ├── controlBar.ts    #   底部控制列（視角切換、日期選擇、圖層開關）
+        ├── timeline.ts      #   時間軸播放控制（播放/速率/年份滑桿）
         ├── sidebar.ts       #   點選天體後的資訊側欄
         └── notice.ts        #   精度聲明、比例尺註記
 ```
@@ -137,19 +138,21 @@ Three.z = -EQJ.y
 interface AppState {
   time: Date;                    // 目前呈現時刻
   viewMode: 'helio' | 'geo';     // 視角
-  geoSubMode: 'free' | 'eclipticLock'; // 地心：自由旋轉/鎖定黃道帶
   playing: boolean;              // 時間軸播放中
-  playSpeed: number;             // 秒→模擬時間倍率（1天/秒 … 10年/秒）
+  playSpeed: number;             // 播放速率：模擬日/真實秒（1天/秒 … 100年/秒）
   layers: {                      // 圖層開關
     orbits: boolean; mansionLines: boolean; mansionLabels: boolean;
     zodiacBands: boolean; eclipticLine: boolean; equatorLine: boolean;
-    halley: boolean; precessionCompare: boolean;
+    comets: boolean;
     modernPlanetsHelio: boolean; // 現代三王星（日心視角），預設 true
     modernPlanetsGeo: boolean;   // 現代三王星（地心/渾象視角），預設 false（古人肉眼不可見）
   };
-  selection: SelectedBody | null; // 側欄選取對象
+  selection: SelectedBody | null; // 側欄選取對象（planet | mansion | comet）
 }
 ```
+
+（未來擴充保留：`geoSubMode: 'free' | 'eclipticLock'` 鎖定黃道帶視線、
+`precessionCompare` 歲差對照環——見 §7.6。）
 
 更新流程：`ui/` 呼叫 `store.set(...)` → 訂閱者（`scene/`、`sidebar`）收到變更 → 重算/重繪。
 渲染迴圈只在狀態變更或播放中才更新位置（靜止時不重算星曆，省電且穩 60fps）。
@@ -205,7 +208,7 @@ schema 保留 `system` 欄位，未來可加入漢代距星作對照模式：
 `zodiacNames.ts`：白羊宮、金牛宮、雙子宮、巨蟹宮、獅子宮、處女宮、天秤宮、
 天蠍宮、射手宮、摩羯宮、水瓶宮、雙魚宮。
 
-### 6.4 七曜與哈雷 — TypeScript 常數
+### 6.4 七曜與彗星 — TypeScript 常數
 
 - `planets.ts`：分兩組——
   - **七曜組**：日、月、水星、金星、火星、木星、土星（+地球，日心場景需要）。
@@ -214,8 +217,10 @@ schema 保留 `system` 欄位，未來可加入漢代距星作對照模式：
     每筆含 `discoveryYear` 欄位，供標籤標注與時間軸淡化判斷。
   - 共通欄位：astronomy-engine `Body` 對應、顯示顏色、渲染半徑、分組標記
     （三王星用不同色系 + 虛線軌道，見 §7.8）。
-- `halley.ts`：a=17.834 AU、e=0.967、i=162.262°、Ω=58.42°、ω=111.33°、
-  近日點時刻 1986-02-09（JD 2446467.395）、週期 75.3 年。來源標注 JPL。
+- `comets.ts`：彗星軌道根數（J2000 黃道框架密切根數，來源 JPL Small-Body Database）。
+  收錄四顆：哈雷（1P，q=0.5871、e=0.96714、i=162.26°、Tp=JD 2446467.395）、
+  恩克（2P，週期最短 3.3 年）、斯威夫特–塔特爾（109P，英仙座流星雨母體）、
+  海爾–博普（C/1995 O1，1997 大彗星）。每筆含中文名、歷史備註。
 
 ## 7. 關鍵演算法設計
 
@@ -235,11 +240,14 @@ schema 保留 `system` 欄位，未來可加入漢代距星作對照模式：
   因為宿界綁定恆星，歲差之下宿界在「當日黃道」座標中緩慢漂移，與十二宮錯位——
   即階段三要呈現的現象。
 
-### 7.4 哈雷彗星（規格明定的唯一自算項目）
+### 7.4 彗星（規格明定的唯一自算項目）
 astronomy-engine 不含彗星星曆，依規格以軌道根數作**二體克卜勒傳播**：
-平近點角 → 牛頓迭代解克卜勒方程 → 真近點角 → 軌道面座標 → 依 (i, Ω, ω) 旋轉至
-黃道座標 → EQJ。此為精確二體解而非近似公式。誠實標注：未含行星攝動，
-離 1986 曆元越遠誤差越大；2061 年回歸日期以此推算屬示意性質（於 UI 註明）。
+平近點角 → 牛頓迭代解克卜勒方程（高離心率以 π 起步保證收斂）→ 軌道面座標 →
+依 (ω, i, Ω) 旋轉至 J2000 黃道 → 引擎旋轉矩陣轉 EQJ。此為精確二體解而非近似公式。
+誠實標注：未含行星攝動，離各自曆元近日點越遠誤差越大（於 UI 與側欄註明）。
+軌道線在慣性系中固定，只需取樣一次；以**偏近點角均勻取樣**，
+避免時間均勻取樣把所有點堆到遠日點。傳播用週期一律由半長軸推得
+（高斯年 × a^1.5），與克卜勒方程自洽；顯示用概略週期另存。
 
 ### 7.5 距離比例尺（日心視角）
 `r_scene = k · sqrt(r_AU)`。壓縮後的距離比：
@@ -297,7 +305,8 @@ astronomy-engine 不含彗星星曆，依規格以軌道根數作**二體克卜�
 1. **恆星自行忽略**：第一版恆星固定於 J2000 位置。對 ±3000 年時間尺度，
    多數亮星自行影響 < 1°，但心宿二等近距星會有可見偏差。列入未來擴充。
 2. **astronomy-engine 高精度範圍 1700–2200 年**：範圍外精度遞減，UI 常駐註明。
-3. **哈雷彗星未含攝動**：二體推算，遠離 1986 曆元誤差增大。
+3. **彗星未含攝動**：二體推算，遠離各自曆元誤差增大
+   （哈雷 2061 回歸以此推算與含攝動預測相差數週）。
 4. **距離非等比**：√ 壓縮，UI 常駐註明。
 5. **十二宮採回歸黃道等分**：與占星「星座」同框架，與天文學 IAU 星座邊界無關。
 6. **冥王星專用模型範圍較窄**：超出 astronomy-engine 支援範圍的時刻隱藏冥王星
@@ -309,7 +318,9 @@ astronomy-engine 不含彗星星曆，依規格以軌道根數作**二體克卜�
   `feat(stage1): 日心行星擺放與軌道線` / `data: 二十八宿距星表` / `docs: …`。
 - 遠端：本地整理完成後由使用者自行建立 GitHub repo 並 push。
 - 階段一驗收：2026-07-13 木星地心黃經與星曆對照誤差 < 1°（寫成可重跑的檢核腳本
-  `scripts/verify-stage1.ts`，用 astronomy-engine 反查並輸出對照值）。
+  `scripts/verify-stage1.mjs`，用 astronomy-engine 反查並輸出對照值）。
+- 階段二驗收：`scripts/verify-stage2.mjs`——哈雷近日點距/遠日點距/比角動量守恆、
+  恩克週期對照公開值、ECL→EQJ 與 ECT→EQJ 旋轉矩陣用法檢核。
 
 ## 11. 部署
 
@@ -321,6 +332,6 @@ astronomy-engine 不含彗星星曆，依規格以軌道根數作**二體克卜�
 
 | 階段 | 新增/主要模組 |
 |---|---|
-| 一 | `astro/{time,ephemeris,frames}`、`data/*`、`scene/{engine,celestialSphere,planets,orbits,scale,modes/helioMode}`、`ui/{controlBar,datePicker,sidebar}`；三王星於日心視角上線（虛線軌道、發現年標注、開關預設開） |
-| 二 | `astro/{retrograde,mansions,zodiac}`、`scene/{overlays,modes/geoMode}`、`ui/` 視角切換與側欄擴充；三王星於地心視角預設隱藏（可開） |
-| 三 | `astro/halley`、`scene/` 歲差對照環與哈雷軌道、`ui/timeline`、精度聲明；三王星發現年前淡化效果、冥王星模型範圍防護 |
+| 一 | `astro/{time,ephemeris,frames,retrograde,mansions,zodiac}`、`data/*`、`scene/{engine,celestialSphere,planets,orbits,scale}`、`ui/{controlBar,sidebar}`；三王星於日心視角上線（虛線軌道、發現年標注、開關預設開） |
+| 二 | `scene/{overlays,comets,modes/helioMode,modes/geoMode}`、`astro/comets`、`data/comets`、`ui/timeline`、視角切換與側欄擴充；三王星於地心視角預設隱藏（可開）；**時間軸與彗星自階段三提前納入本階段交付** |
+| 三（剩餘） | 歲差對照環（§7.6，兩組十二宮環同屏對照）、`geoSubMode` 鎖定黃道帶 |

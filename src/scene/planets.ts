@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { AstroTime, Body } from 'astronomy-engine';
+import type { ViewMode } from '../state/store';
 import { ALL_PLANETS, PlanetSpec } from '../data/planets';
 import { geoVec, helioVec } from '../astro/ephemeris';
-import { compressToScene, eqjToScene } from './scale';
+import { compressToScene, directionToSphere, eqjToScene, R_GEO_BODIES } from './scale';
 import { makeLabel } from './labels';
 
 /** 月球在日心視角中的固定示意偏移量（場景單位）——方向真實、距離示意 */
@@ -40,10 +41,32 @@ export class Planets {
     }
   }
 
-  /** 依時刻更新所有行星位置（日心視角、√ 壓縮） */
-  update(time: AstroTime): void {
+  /**
+   * 依時刻更新所有行星位置。
+   * 日心視角：HelioVector → √ 壓縮；渾象視角：GeoVector 方向投影至天球面。
+   */
+  update(time: AstroTime, mode: ViewMode): void {
     for (const node of this.nodes.values()) {
       const { spec, mesh } = node;
+
+      if (mode === 'geo') {
+        // 地球是觀測點本身，渾象視角不顯示
+        if (spec.body === Body.Earth) {
+          node.available = false;
+          mesh.visible = false;
+          continue;
+        }
+        const gv = geoVec(spec.body, time);
+        if (!gv) {
+          node.available = false;
+          mesh.visible = false;
+          continue;
+        }
+        node.available = true;
+        directionToSphere(gv, R_GEO_BODIES, mesh.position);
+        continue;
+      }
+
       if (spec.body === Body.Sun) {
         mesh.position.set(0, 0, 0);
         continue;
@@ -74,12 +97,16 @@ export class Planets {
     }
   }
 
-  /** 圖層開關與發現年淡化（visible/opacity 統一在此收斂） */
-  applyVisibility(showModern: boolean, year: number): void {
+  /** 圖層開關、發現年淡化、視角尺寸（visible/opacity/scale 統一在此收斂） */
+  applyVisibility(showModern: boolean, year: number, mode: ViewMode): void {
     for (const node of this.nodes.values()) {
       const { spec, mesh } = node;
       const layerOn = spec.group !== 'modern' || showModern;
-      mesh.visible = layerOn && node.available;
+      const geoHidden = mode === 'geo' && spec.geoRenderRadius === 0;
+      mesh.visible = layerOn && node.available && !geoHidden;
+      // 渾象視角天體遠在天球面（~1100 單位外），以 scale 放大到可視大小
+      const scale = mode === 'geo' ? spec.geoRenderRadius / spec.renderRadius : 1;
+      mesh.scale.setScalar(scale);
       const mat = mesh.material as THREE.MeshBasicMaterial;
       const undiscovered = spec.discoveryYear != null && year < spec.discoveryYear;
       mat.opacity = undiscovered ? 0.3 : 1;

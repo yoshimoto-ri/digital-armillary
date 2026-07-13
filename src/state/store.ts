@@ -3,8 +3,8 @@
 export type ViewMode = 'helio' | 'geo';
 
 export interface SelectedBody {
-  type: 'planet' | 'mansion';
-  /** planet: PlanetSpec.key；mansion: 宿名 */
+  type: 'planet' | 'mansion' | 'comet';
+  /** planet: PlanetSpec.key；mansion: 宿名；comet: CometSpec.key */
   key: string;
 }
 
@@ -12,6 +12,14 @@ export interface LayerState {
   orbits: boolean;
   mansionLines: boolean;
   mansionLabels: boolean;
+  /** 當日黃道線 */
+  eclipticLine: boolean;
+  /** 當日天赤道線 */
+  equatorLine: boolean;
+  /** 十二宮分區（宮界刻線 + 宮名 + 春分點） */
+  zodiacBands: boolean;
+  /** 彗星本體與軌道 */
+  comets: boolean;
   /** 現代三王星——兩個視角各自記住開關 */
   modernPlanetsHelio: boolean;
   modernPlanetsGeo: boolean;
@@ -20,6 +28,10 @@ export interface LayerState {
 export interface AppState {
   time: Date;
   viewMode: ViewMode;
+  /** 時間軸播放中 */
+  playing: boolean;
+  /** 播放速率：模擬日／真實秒 */
+  playSpeed: number;
   layers: LayerState;
   selection: SelectedBody | null;
 }
@@ -30,10 +42,16 @@ type Listener = (state: AppState, changed: Set<StateKey>) => void;
 const state: AppState = {
   time: new Date(),
   viewMode: 'helio',
+  playing: false,
+  playSpeed: 1,
   layers: {
     orbits: true,
     mansionLines: true,
     mansionLabels: true,
+    eclipticLine: true,
+    equatorLine: true,
+    zodiacBands: true,
+    comets: true,
     modernPlanetsHelio: true,
     modernPlanetsGeo: false,
   },

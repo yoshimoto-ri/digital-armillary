@@ -5,8 +5,16 @@ import { formatLon, starEclipticLonOfDate } from '../astro/frames';
 import { mansionBoundaries, mansionOf } from '../astro/mansions';
 import { zodiacOf } from '../astro/zodiac';
 import { motionState } from '../astro/retrograde';
+import { cometGeoEclipticLon, cometHelioDistance } from '../astro/comets';
 import { ALL_PLANETS, HAS_RETROGRADE } from '../data/planets';
+import { COMETS } from '../data/comets';
 import type { MansionsFile } from '../data/types';
+
+/** 儒略日 → UTC 年月日字串 */
+function jdToDateString(jd: number): string {
+  const d = new Date((jd - 2440587.5) * 86400000);
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
+}
 
 /** 側欄：點選行星/宿後顯示黃經、所在宿、所在宮、順逆行（ARCHITECTURE.md UI 需求） */
 export function createSidebar(root: HTMLElement, mansionsFile: MansionsFile): void {
@@ -50,6 +58,22 @@ export function createSidebar(root: HTMLElement, mansionsFile: MansionsFile): vo
           }
         }
       }
+    } else if (selection.type === 'comet') {
+      const spec = COMETS.find((c) => c.key === selection.key)!;
+      title = spec.nameZh;
+      rows.push(['編號', spec.designation]);
+      const lon = cometGeoEclipticLon(spec, t);
+      if (lon != null) {
+        rows.push(['地心黃經', formatLon(lon)]);
+        rows.push(['所在宿', `${mansionOf(lon, boundaries).name}宿`]);
+        const z = zodiacOf(lon);
+        rows.push(['所在宮', `${z.name} ${formatLon(z.degreeInSign)}`]);
+      }
+      const r = cometHelioDistance(spec, t);
+      rows.push(['日心距', `${r < 10 ? r.toFixed(2) : r.toFixed(1)} AU`]);
+      rows.push(['週期', spec.periodYears >= 1000 ? `約 ${Math.round(spec.periodYears / 100) * 100} 年` : `約 ${spec.periodYears} 年`]);
+      rows.push(['曆元近日點', jdToDateString(spec.tpJd)]);
+      extra = `${spec.note} 軌道為二體克卜勒推算（未含行星攝動），離曆元近日點越遠誤差越大。`;
     } else {
       const m = mansionsFile.mansions.find((x) => x.name === selection.key)!;
       title = `${m.name}宿（${m.group}）`;

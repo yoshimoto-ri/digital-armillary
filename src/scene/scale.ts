@@ -12,6 +12,12 @@ export const SCALE_K = 40;
 /** 天球半徑：遠大於行星軌道（冥王星遠日點壓縮後 ~281 的 4 倍餘） */
 export const R_SPHERE = 1200;
 
+/** 渾象（地心）視角：天體投影半徑，略小於恆星天球以免遮擋星點 */
+export const R_GEO_BODIES = R_SPHERE * 0.94;
+
+/** 當日框架覆蓋層（黃道線、天赤道線、十二宮）繪製半徑 */
+export const R_OVERLAY = R_SPHERE * 0.985;
+
 /** EQJ → Three.js（Y-up）：x→x、z→y、-y→z，右手系不變 */
 export function eqjToScene(v: EqjVec, out?: THREE.Vector3): THREE.Vector3 {
   const o = out ?? new THREE.Vector3();
