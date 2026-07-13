@@ -1,0 +1,1721 @@
+{
+  "source": "星官成員取各宿同名星官之亮星；來源同 mansions.json（HYG v4.1 + Stellarium chinese skyculture）；連線為示意star pattern",
+  "byMansion": {
+    "角": {
+      "stars": [
+        {
+          "name": "角宿一",
+          "westernName": "Spica (67Alp Vir)",
+          "hip": 65474,
+          "raJ2000": 201.29825,
+          "decJ2000": -11.16132,
+          "vmag": 0.98
+        },
+        {
+          "name": "角宿二",
+          "westernName": "Heze (79Zet Vir)",
+          "hip": 66249,
+          "raJ2000": 203.6733,
+          "decJ2000": -0.59582,
+          "vmag": 3.38
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    "亢": {
+      "stars": [
+        {
+          "name": "亢宿一",
+          "westernName": "Kang (98Kap Vir)",
+          "hip": 69427,
+          "raJ2000": 213.22393,
+          "decJ2000": -10.2737,
+          "vmag": 4.18
+        },
+        {
+          "name": "亢宿二",
+          "westernName": "Syrma (99Iot Vir)",
+          "hip": 69701,
+          "raJ2000": 214.00362,
+          "decJ2000": -6.00055,
+          "vmag": 4.07
+        },
+        {
+          "name": "亢宿三",
+          "westernName": "Elgafar (105Phi Vir)",
+          "hip": 70755,
+          "raJ2000": 217.05057,
+          "decJ2000": -2.22796,
+          "vmag": 4.81
+        },
+        {
+          "name": "亢宿四",
+          "westernName": "Khambalia (100Lam Vir)",
+          "hip": 69974,
+          "raJ2000": 214.77747,
+          "decJ2000": -13.3711,
+          "vmag": 4.52
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    "氐": {
+      "stars": [
+        {
+          "name": "氐宿一",
+          "westernName": "Zubenelgenubi (9Alp2Lib)",
+          "hip": 72622,
+          "raJ2000": 222.71965,
+          "decJ2000": -16.04178,
+          "vmag": 2.75
+        },
+        {
+          "name": "氐宿二",
+          "westernName": "24Iot1Lib",
+          "hip": 74392,
+          "raJ2000": 228.05538,
+          "decJ2000": -19.79171,
+          "vmag": 4.54
+        },
+        {
+          "name": "氐宿三",
+          "westernName": "Zubenelhakrabi (38Gam Lib)",
+          "hip": 76333,
+          "raJ2000": 233.88157,
+          "decJ2000": -14.78954,
+          "vmag": 3.91
+        },
+        {
+          "name": "氐宿四",
+          "westernName": "Zubeneschamali (27Bet Lib)",
+          "hip": 74785,
+          "raJ2000": 229.25173,
+          "decJ2000": -9.38292,
+          "vmag": 2.61
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ]
+      ]
+    },
+    "房": {
+      "stars": [
+        {
+          "name": "房宿一",
+          "westernName": "Fang (6Pi  Sco)",
+          "hip": 78265,
+          "raJ2000": 239.71298,
+          "decJ2000": -26.1141,
+          "vmag": 2.89
+        },
+        {
+          "name": "房宿二",
+          "westernName": "Iklil (5Rho Sco)",
+          "hip": 78104,
+          "raJ2000": 239.22115,
+          "decJ2000": -29.21407,
+          "vmag": 3.87
+        },
+        {
+          "name": "房宿三",
+          "westernName": "Dschubba (7Del Sco)",
+          "hip": 78401,
+          "raJ2000": 240.08335,
+          "decJ2000": -22.62171,
+          "vmag": 2.29
+        },
+        {
+          "name": "房宿四",
+          "westernName": "Acrab (8Bet1Sco)",
+          "hip": 78820,
+          "raJ2000": 241.3593,
+          "decJ2000": -19.80545,
+          "vmag": 2.56
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    "心": {
+      "stars": [
+        {
+          "name": "心宿一",
+          "westernName": "Alniyat (20Sig Sco)",
+          "hip": 80112,
+          "raJ2000": 245.29715,
+          "decJ2000": -25.5928,
+          "vmag": 2.9
+        },
+        {
+          "name": "心宿二",
+          "westernName": "Antares (21Alp Sco)",
+          "hip": 80763,
+          "raJ2000": 247.35192,
+          "decJ2000": -26.432,
+          "vmag": 1.06
+        },
+        {
+          "name": "心宿三",
+          "westernName": "Paikauhale (23Tau Sco)",
+          "hip": 81266,
+          "raJ2000": 248.97065,
+          "decJ2000": -28.21602,
+          "vmag": 2.82
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    },
+    "尾": {
+      "stars": [
+        {
+          "name": "尾宿一",
+          "westernName": "Xamidimura (Mu 1Sco)",
+          "hip": 82514,
+          "raJ2000": 252.96764,
+          "decJ2000": -38.04738,
+          "vmag": 3
+        },
+        {
+          "name": "尾宿二",
+          "westernName": "Larawag (26Eps Sco)",
+          "hip": 82396,
+          "raJ2000": 252.5412,
+          "decJ2000": -34.29323,
+          "vmag": 2.29
+        },
+        {
+          "name": "尾宿三",
+          "westernName": "Zet2Sco",
+          "hip": 82729,
+          "raJ2000": 253.64597,
+          "decJ2000": -42.36131,
+          "vmag": 3.62
+        },
+        {
+          "name": "尾宿四",
+          "westernName": "Eta Sco",
+          "hip": 84143,
+          "raJ2000": 258.03828,
+          "decJ2000": -43.23919,
+          "vmag": 3.32
+        },
+        {
+          "name": "尾宿五",
+          "westernName": "Sargas (The Sco)",
+          "hip": 86228,
+          "raJ2000": 264.3297,
+          "decJ2000": -42.99782,
+          "vmag": 1.86
+        },
+        {
+          "name": "尾宿六",
+          "westernName": "Iot1Sco",
+          "hip": 87073,
+          "raJ2000": 266.89617,
+          "decJ2000": -40.127,
+          "vmag": 2.99
+        },
+        {
+          "name": "尾宿七",
+          "westernName": "Kap Sco",
+          "hip": 86670,
+          "raJ2000": 265.62198,
+          "decJ2000": -39.02998,
+          "vmag": 2.39
+        },
+        {
+          "name": "尾宿八",
+          "westernName": "Shaula (35Lam Sco)",
+          "hip": 85927,
+          "raJ2000": 263.40217,
+          "decJ2000": -37.10382,
+          "vmag": 1.62
+        },
+        {
+          "name": "尾宿九",
+          "westernName": "Lesath (34Ups Sco)",
+          "hip": 85696,
+          "raJ2000": 262.69098,
+          "decJ2000": -37.29581,
+          "vmag": 2.7
+        }
+      ],
+      "lines": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          8,
+          7
+        ]
+      ]
+    },
+    "箕": {
+      "stars": [
+        {
+          "name": "箕宿一",
+          "westernName": "Alnasl (10Gam2Sgr)",
+          "hip": 88635,
+          "raJ2000": 271.45204,
+          "decJ2000": -30.42409,
+          "vmag": 2.98
+        },
+        {
+          "name": "箕宿二",
+          "westernName": "Kaus Media (19Del Sgr)",
+          "hip": 89931,
+          "raJ2000": 275.2485,
+          "decJ2000": -29.8281,
+          "vmag": 2.72
+        },
+        {
+          "name": "箕宿三",
+          "westernName": "Kaus Australis (20Eps Sgr)",
+          "hip": 90185,
+          "raJ2000": 276.04302,
+          "decJ2000": -34.38462,
+          "vmag": 1.79
+        },
+        {
+          "name": "箕宿四",
+          "westernName": "Eta Sgr",
+          "hip": 89642,
+          "raJ2000": 274.4069,
+          "decJ2000": -36.76169,
+          "vmag": 3.1
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ]
+      ]
+    },
+    "斗": {
+      "stars": [
+        {
+          "name": "斗宿一",
+          "westernName": "27Phi Sgr",
+          "hip": 92041,
+          "raJ2000": 281.4141,
+          "decJ2000": -26.99078,
+          "vmag": 3.17
+        },
+        {
+          "name": "斗宿二",
+          "westernName": "Kaus Borealis (22Lam Sgr)",
+          "hip": 90496,
+          "raJ2000": 276.99268,
+          "decJ2000": -25.4217,
+          "vmag": 2.82
+        },
+        {
+          "name": "斗宿三",
+          "westernName": "Polis (13Mu  Sgr)",
+          "hip": 89341,
+          "raJ2000": 273.44088,
+          "decJ2000": -21.05883,
+          "vmag": 3.84
+        },
+        {
+          "name": "斗宿四",
+          "westernName": "Nunki (34Sig Sgr)",
+          "hip": 92855,
+          "raJ2000": 283.81635,
+          "decJ2000": -26.29672,
+          "vmag": 2.05
+        },
+        {
+          "name": "斗宿五",
+          "westernName": "40Tau Sgr",
+          "hip": 93864,
+          "raJ2000": 286.73505,
+          "decJ2000": -27.67042,
+          "vmag": 3.32
+        },
+        {
+          "name": "斗宿六",
+          "westernName": "Ascella (38Zet Sgr)",
+          "hip": 93506,
+          "raJ2000": 285.65298,
+          "decJ2000": -29.88011,
+          "vmag": 2.6
+        }
+      ],
+      "lines": [
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          0
+        ]
+      ]
+    },
+    "牛": {
+      "stars": [
+        {
+          "name": "牛宿一",
+          "westernName": "Dabih (9Bet Cap)",
+          "hip": 100345,
+          "raJ2000": 305.2528,
+          "decJ2000": -14.78137,
+          "vmag": 3.05
+        },
+        {
+          "name": "牛宿二",
+          "westernName": "Algedi (6Alp2Cap)",
+          "hip": 100064,
+          "raJ2000": 304.51356,
+          "decJ2000": -12.54485,
+          "vmag": 3.58
+        },
+        {
+          "name": "牛宿三",
+          "westernName": "2Xi 2Cap",
+          "hip": 99572,
+          "raJ2000": 303.10779,
+          "decJ2000": -12.6175,
+          "vmag": 5.84
+        },
+        {
+          "name": "牛宿四",
+          "westernName": "10Pi  Cap",
+          "hip": 100881,
+          "raJ2000": 306.83004,
+          "decJ2000": -18.21172,
+          "vmag": 5.08
+        },
+        {
+          "name": "牛宿五",
+          "westernName": "12Omi Cap",
+          "hip": 101123,
+          "raJ2000": 307.4746,
+          "decJ2000": -18.58318,
+          "vmag": 5.94
+        },
+        {
+          "name": "牛宿六",
+          "westernName": "11Rho Cap",
+          "hip": 101027,
+          "raJ2000": 307.21506,
+          "decJ2000": -17.81369,
+          "vmag": 4.77
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          5
+        ]
+      ]
+    },
+    "女": {
+      "stars": [
+        {
+          "name": "女宿一",
+          "westernName": "Albali (2Eps Aqr)",
+          "hip": 102618,
+          "raJ2000": 311.91897,
+          "decJ2000": -9.49578,
+          "vmag": 3.78
+        },
+        {
+          "name": "女宿二",
+          "westernName": "6Mu  Aqr",
+          "hip": 103045,
+          "raJ2000": 313.16348,
+          "decJ2000": -8.98332,
+          "vmag": 4.73
+        },
+        {
+          "name": "女宿三",
+          "westernName": "4    Aqr",
+          "hip": 102945,
+          "raJ2000": 312.85728,
+          "decJ2000": -5.62663,
+          "vmag": 5.99
+        },
+        {
+          "name": "女宿四",
+          "westernName": "3    Aqr",
+          "hip": 102624,
+          "raJ2000": 311.93432,
+          "decJ2000": -5.0277,
+          "vmag": 4.43
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ]
+      ]
+    },
+    "虛": {
+      "stars": [
+        {
+          "name": "虛宿一",
+          "westernName": "Sadalsuud (22Bet Aqr)",
+          "hip": 106278,
+          "raJ2000": 322.88973,
+          "decJ2000": -5.57117,
+          "vmag": 2.9
+        },
+        {
+          "name": "虛宿二",
+          "westernName": "Kitalpha (8Alp Equ)",
+          "hip": 104987,
+          "raJ2000": 318.95596,
+          "decJ2000": 5.24784,
+          "vmag": 3.92
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    "危": {
+      "stars": [
+        {
+          "name": "危宿一",
+          "westernName": "Sadalmelik (34Alp Aqr)",
+          "hip": 109074,
+          "raJ2000": 331.44599,
+          "decJ2000": -0.31985,
+          "vmag": 2.95
+        },
+        {
+          "name": "危宿二",
+          "westernName": "Biham (26The Peg)",
+          "hip": 109427,
+          "raJ2000": 332.54994,
+          "decJ2000": 6.19787,
+          "vmag": 3.52
+        },
+        {
+          "name": "危宿三",
+          "westernName": "Enif (8Eps Peg)",
+          "hip": 107315,
+          "raJ2000": 326.0465,
+          "decJ2000": 9.87501,
+          "vmag": 2.38
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    },
+    "室": {
+      "stars": [
+        {
+          "name": "室宿一",
+          "westernName": "Markab (54Alp Peg)",
+          "hip": 113963,
+          "raJ2000": 346.19022,
+          "decJ2000": 15.20526,
+          "vmag": 2.49
+        },
+        {
+          "name": "室宿二",
+          "westernName": "Scheat (53Bet Peg)",
+          "hip": 113881,
+          "raJ2000": 345.94351,
+          "decJ2000": 28.08279,
+          "vmag": 2.44
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    "壁": {
+      "stars": [
+        {
+          "name": "壁宿一",
+          "westernName": "Algenib (88Gam Peg)",
+          "hip": 1067,
+          "raJ2000": 3.30897,
+          "decJ2000": 15.1836,
+          "vmag": 2.83
+        },
+        {
+          "name": "壁宿二",
+          "westernName": "Alpheratz (21Alp And)",
+          "hip": 677,
+          "raJ2000": 2.09687,
+          "decJ2000": 29.09043,
+          "vmag": 2.07
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    "奎": {
+      "stars": [
+        {
+          "name": "奎宿一",
+          "westernName": "38Eta And",
+          "hip": 4463,
+          "raJ2000": 14.30167,
+          "decJ2000": 23.41765,
+          "vmag": 4.4
+        },
+        {
+          "name": "奎宿二",
+          "westernName": "34Zet And",
+          "hip": 3693,
+          "raJ2000": 11.83472,
+          "decJ2000": 24.26718,
+          "vmag": 4.08
+        },
+        {
+          "name": "奎宿三",
+          "westernName": "65    Psc",
+          "hip": 3885,
+          "raJ2000": 12.47149,
+          "decJ2000": 27.71029,
+          "vmag": 5.55
+        },
+        {
+          "name": "奎宿四",
+          "westernName": "30Eps And",
+          "hip": 3031,
+          "raJ2000": 9.63903,
+          "decJ2000": 29.31175,
+          "vmag": 4.34
+        },
+        {
+          "name": "奎宿五",
+          "westernName": "31Del And",
+          "hip": 3092,
+          "raJ2000": 9.83193,
+          "decJ2000": 30.86102,
+          "vmag": 3.27
+        },
+        {
+          "name": "奎宿六",
+          "westernName": "29Pi  And",
+          "hip": 2912,
+          "raJ2000": 9.2202,
+          "decJ2000": 33.71934,
+          "vmag": 4.34
+        },
+        {
+          "name": "奎宿七",
+          "westernName": "35Nu  And",
+          "hip": 3881,
+          "raJ2000": 12.45351,
+          "decJ2000": 41.07891,
+          "vmag": 4.53
+        },
+        {
+          "name": "奎宿九",
+          "westernName": "Mirach (43Bet And)",
+          "hip": 5447,
+          "raJ2000": 17.43291,
+          "decJ2000": 35.62056,
+          "vmag": 2.07
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          7
+        ]
+      ]
+    },
+    "婁": {
+      "stars": [
+        {
+          "name": "婁宿一",
+          "westernName": "Sheratan (6Bet Ari)",
+          "hip": 8903,
+          "raJ2000": 28.66002,
+          "decJ2000": 20.80804,
+          "vmag": 2.64
+        },
+        {
+          "name": "婁宿二",
+          "westernName": "Mesarthim (5Gam2Ari)",
+          "hip": 8832,
+          "raJ2000": 28.38255,
+          "decJ2000": 19.29385,
+          "vmag": 3.88
+        },
+        {
+          "name": "婁宿三",
+          "westernName": "Hamal (13Alp Ari)",
+          "hip": 9884,
+          "raJ2000": 31.79333,
+          "decJ2000": 23.46242,
+          "vmag": 2.01
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ]
+    },
+    "胃": {
+      "stars": [
+        {
+          "name": "胃宿一",
+          "westernName": "35    Ari",
+          "hip": 12719,
+          "raJ2000": 40.86297,
+          "decJ2000": 27.70715,
+          "vmag": 4.65
+        },
+        {
+          "name": "胃宿二",
+          "westernName": "Lilii Borea (39    Ari)",
+          "hip": 13061,
+          "raJ2000": 41.9772,
+          "decJ2000": 29.24712,
+          "vmag": 4.52
+        },
+        {
+          "name": "胃宿三",
+          "westernName": "Bharani (41    Ari)",
+          "hip": 13209,
+          "raJ2000": 42.49594,
+          "decJ2000": 27.26051,
+          "vmag": 3.61
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          0
+        ]
+      ]
+    },
+    "昴": {
+      "stars": [
+        {
+          "name": "昴宿一",
+          "westernName": "Electra (17    Tau)",
+          "hip": 17499,
+          "raJ2000": 56.2189,
+          "decJ2000": 24.11334,
+          "vmag": 3.72
+        },
+        {
+          "name": "昴宿二",
+          "westernName": "Taygeta (19    Tau)",
+          "hip": 17531,
+          "raJ2000": 56.30205,
+          "decJ2000": 24.46728,
+          "vmag": 4.3
+        },
+        {
+          "name": "昴宿三",
+          "westernName": "Asterope (21    Tau)",
+          "hip": 17579,
+          "raJ2000": 56.47698,
+          "decJ2000": 24.55451,
+          "vmag": 5.76
+        },
+        {
+          "name": "昴宿四",
+          "westernName": "Maia (20    Tau)",
+          "hip": 17573,
+          "raJ2000": 56.45669,
+          "decJ2000": 24.36775,
+          "vmag": 3.87
+        },
+        {
+          "name": "昴宿五",
+          "westernName": "Merope (23    Tau)",
+          "hip": 17608,
+          "raJ2000": 56.58156,
+          "decJ2000": 23.94836,
+          "vmag": 4.14
+        },
+        {
+          "name": "昴宿六",
+          "westernName": "Alcyone (25Eta Tau)",
+          "hip": 17702,
+          "raJ2000": 56.87115,
+          "decJ2000": 24.10514,
+          "vmag": 2.85
+        },
+        {
+          "name": "昴宿七",
+          "westernName": "Atlas (27    Tau)",
+          "hip": 17847,
+          "raJ2000": 57.2906,
+          "decJ2000": 24.05342,
+          "vmag": 3.62
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          6
+        ]
+      ]
+    },
+    "畢": {
+      "stars": [
+        {
+          "name": "畢宿一",
+          "westernName": "Ain (74Eps Tau)",
+          "hip": 20889,
+          "raJ2000": 67.15414,
+          "decJ2000": 19.18043,
+          "vmag": 3.53
+        },
+        {
+          "name": "畢宿二",
+          "westernName": "68Del3Tau",
+          "hip": 20648,
+          "raJ2000": 66.37242,
+          "decJ2000": 17.92791,
+          "vmag": 4.3
+        },
+        {
+          "name": "畢宿三",
+          "westernName": "Secunda Hyadum (61Del1Tau)",
+          "hip": 20455,
+          "raJ2000": 65.7337,
+          "decJ2000": 17.54251,
+          "vmag": 3.77
+        },
+        {
+          "name": "畢宿四",
+          "westernName": "Prima Hyadum (54Gam Tau)",
+          "hip": 20205,
+          "raJ2000": 64.94834,
+          "decJ2000": 15.62764,
+          "vmag": 3.65
+        },
+        {
+          "name": "畢宿五",
+          "westernName": "Aldebaran (87Alp Tau)",
+          "hip": 21421,
+          "raJ2000": 68.98016,
+          "decJ2000": 16.5093,
+          "vmag": 0.87
+        },
+        {
+          "name": "畢宿六",
+          "westernName": "77The1Tau",
+          "hip": 20885,
+          "raJ2000": 67.14372,
+          "decJ2000": 15.96218,
+          "vmag": 3.84
+        },
+        {
+          "name": "畢宿八",
+          "westernName": "35Lam Tau",
+          "hip": 18724,
+          "raJ2000": 60.17007,
+          "decJ2000": 12.49035,
+          "vmag": 3.41
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          6
+        ]
+      ]
+    },
+    "觜": {
+      "stars": [
+        {
+          "name": "觜宿一",
+          "westernName": "Meissa (39Lam Ori)",
+          "hip": 26207,
+          "raJ2000": 83.78449,
+          "decJ2000": 9.93416,
+          "vmag": 3.39
+        },
+        {
+          "name": "觜宿二",
+          "westernName": "37Phi1Ori",
+          "hip": 26176,
+          "raJ2000": 83.70516,
+          "decJ2000": 9.48958,
+          "vmag": 4.39
+        },
+        {
+          "name": "觜宿三",
+          "westernName": "40Phi2Ori",
+          "hip": 26366,
+          "raJ2000": 84.22662,
+          "decJ2000": 9.29067,
+          "vmag": 4.09
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          0
+        ]
+      ]
+    },
+    "參": {
+      "stars": [
+        {
+          "name": "參宿一",
+          "westernName": "Alnitak (50Zet Ori)",
+          "hip": 26727,
+          "raJ2000": 85.1897,
+          "decJ2000": -1.94257,
+          "vmag": 1.74
+        },
+        {
+          "name": "參宿二",
+          "westernName": "Alnilam (46Eps Ori)",
+          "hip": 26311,
+          "raJ2000": 84.05338,
+          "decJ2000": -1.20192,
+          "vmag": 1.69
+        },
+        {
+          "name": "參宿三",
+          "westernName": "Mintaka (34Del Ori)",
+          "hip": 25930,
+          "raJ2000": 83.00168,
+          "decJ2000": -0.29909,
+          "vmag": 2.25
+        },
+        {
+          "name": "參宿四",
+          "westernName": "Betelgeuse (58Alp Ori)",
+          "hip": 27989,
+          "raJ2000": 88.79293,
+          "decJ2000": 7.40706,
+          "vmag": 0.45
+        },
+        {
+          "name": "參宿五",
+          "westernName": "Bellatrix (24Gam Ori)",
+          "hip": 25336,
+          "raJ2000": 81.28276,
+          "decJ2000": 6.3497,
+          "vmag": 1.64
+        },
+        {
+          "name": "參宿六",
+          "westernName": "Saiph (53Kap Ori)",
+          "hip": 27366,
+          "raJ2000": 86.93912,
+          "decJ2000": -9.66961,
+          "vmag": 2.07
+        },
+        {
+          "name": "參宿七",
+          "westernName": "Rigel (19Bet Ori)",
+          "hip": 24436,
+          "raJ2000": 78.63447,
+          "decJ2000": -8.20164,
+          "vmag": 0.18
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          2,
+          6
+        ]
+      ]
+    },
+    "井": {
+      "stars": [
+        {
+          "name": "井宿一",
+          "westernName": "Tejat (13Mu  Gem)",
+          "hip": 30343,
+          "raJ2000": 95.74009,
+          "decJ2000": 22.51359,
+          "vmag": 2.87
+        },
+        {
+          "name": "井宿二",
+          "westernName": "18Nu  Gem",
+          "hip": 30883,
+          "raJ2000": 97.24079,
+          "decJ2000": 20.21213,
+          "vmag": 4.13
+        },
+        {
+          "name": "井宿三",
+          "westernName": "Alhena (24Gam Gem)",
+          "hip": 31681,
+          "raJ2000": 99.42792,
+          "decJ2000": 16.39925,
+          "vmag": 1.93
+        },
+        {
+          "name": "井宿四",
+          "westernName": "Alzirr (31Xi  Gem)",
+          "hip": 32362,
+          "raJ2000": 101.32236,
+          "decJ2000": 12.89559,
+          "vmag": 3.35
+        },
+        {
+          "name": "井宿五",
+          "westernName": "Mebsuta (27Eps Gem)",
+          "hip": 32246,
+          "raJ2000": 100.98303,
+          "decJ2000": 25.13112,
+          "vmag": 3.06
+        },
+        {
+          "name": "井宿六",
+          "westernName": "36    Gem",
+          "hip": 32921,
+          "raJ2000": 102.88769,
+          "decJ2000": 21.76115,
+          "vmag": 5.28
+        },
+        {
+          "name": "井宿七",
+          "westernName": "Mekbuda (43Zet Gem)",
+          "hip": 34088,
+          "raJ2000": 106.02721,
+          "decJ2000": 20.5703,
+          "vmag": 4.01
+        },
+        {
+          "name": "井宿八",
+          "westernName": "54Lam Gem",
+          "hip": 35350,
+          "raJ2000": 109.52325,
+          "decJ2000": 16.54038,
+          "vmag": 3.58
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          7
+        ]
+      ]
+    },
+    "鬼": {
+      "stars": [
+        {
+          "name": "鬼宿一",
+          "westernName": "31The Cnc",
+          "hip": 41822,
+          "raJ2000": 127.89888,
+          "decJ2000": 18.09442,
+          "vmag": 5.33
+        },
+        {
+          "name": "鬼宿二",
+          "westernName": "33Eta Cnc",
+          "hip": 41909,
+          "raJ2000": 128.17709,
+          "decJ2000": 20.44116,
+          "vmag": 5.33
+        },
+        {
+          "name": "鬼宿三",
+          "westernName": "Asellus Borealis (43Gam Cnc)",
+          "hip": 42806,
+          "raJ2000": 130.82147,
+          "decJ2000": 21.4685,
+          "vmag": 4.66
+        },
+        {
+          "name": "鬼宿四",
+          "westernName": "Asellus Australis (47Del Cnc)",
+          "hip": 42911,
+          "raJ2000": 131.17125,
+          "decJ2000": 18.15431,
+          "vmag": 3.94
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ]
+      ]
+    },
+    "柳": {
+      "stars": [
+        {
+          "name": "柳宿一",
+          "westernName": "4Del Hya",
+          "hip": 42313,
+          "raJ2000": 129.41403,
+          "decJ2000": 5.70378,
+          "vmag": 4.14
+        },
+        {
+          "name": "柳宿二",
+          "westernName": "Minchir (5Sig Hya)",
+          "hip": 42402,
+          "raJ2000": 129.68932,
+          "decJ2000": 3.34144,
+          "vmag": 4.45
+        },
+        {
+          "name": "柳宿三",
+          "westernName": "7Eta Hya",
+          "hip": 42799,
+          "raJ2000": 130.80615,
+          "decJ2000": 3.39866,
+          "vmag": 4.3
+        },
+        {
+          "name": "柳宿四",
+          "westernName": "13Rho Hya",
+          "hip": 43234,
+          "raJ2000": 132.10821,
+          "decJ2000": 5.83781,
+          "vmag": 4.35
+        },
+        {
+          "name": "柳宿五",
+          "westernName": "Ashlesha (11Eps Hya)",
+          "hip": 43109,
+          "raJ2000": 131.6938,
+          "decJ2000": 6.41881,
+          "vmag": 3.38
+        },
+        {
+          "name": "柳宿六",
+          "westernName": "16Zet Hya",
+          "hip": 43813,
+          "raJ2000": 133.84845,
+          "decJ2000": 5.94556,
+          "vmag": 3.11
+        },
+        {
+          "name": "柳宿七",
+          "westernName": "18Ome Hya",
+          "hip": 44659,
+          "raJ2000": 136.49319,
+          "decJ2000": 5.09232,
+          "vmag": 4.99
+        },
+        {
+          "name": "柳宿八",
+          "westernName": "22The Hya",
+          "hip": 45336,
+          "raJ2000": 138.59107,
+          "decJ2000": 2.31428,
+          "vmag": 3.89
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          7
+        ]
+      ]
+    },
+    "星": {
+      "stars": [
+        {
+          "name": "星宿一",
+          "westernName": "Alphard (30Alp Hya)",
+          "hip": 46390,
+          "raJ2000": 141.89685,
+          "decJ2000": -8.6586,
+          "vmag": 1.99
+        },
+        {
+          "name": "星宿二",
+          "westernName": "31Tau1Hya",
+          "hip": 46509,
+          "raJ2000": 142.28707,
+          "decJ2000": -2.76896,
+          "vmag": 4.59
+        },
+        {
+          "name": "星宿三",
+          "westernName": "32Tau2Hya",
+          "hip": 46776,
+          "raJ2000": 142.99554,
+          "decJ2000": -1.18466,
+          "vmag": 4.54
+        },
+        {
+          "name": "星宿四",
+          "westernName": "Ukdah (35Iot Hya)",
+          "hip": 47431,
+          "raJ2000": 144.96401,
+          "decJ2000": -1.14281,
+          "vmag": 3.9
+        },
+        {
+          "name": "星宿六",
+          "westernName": "26    Hya",
+          "hip": 45751,
+          "raJ2000": 139.94326,
+          "decJ2000": -11.97485,
+          "vmag": 4.77
+        },
+        {
+          "name": "星宿五",
+          "westernName": "27    Hya",
+          "hip": 45811,
+          "raJ2000": 140.12091,
+          "decJ2000": -9.5557,
+          "vmag": 4.8
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          5
+        ]
+      ]
+    },
+    "張": {
+      "stars": [
+        {
+          "name": "張宿一",
+          "westernName": "Zhang (39Ups1Hya)",
+          "hip": 48356,
+          "raJ2000": 147.86955,
+          "decJ2000": -14.8466,
+          "vmag": 4.11
+        },
+        {
+          "name": "張宿二",
+          "westernName": "41Lam Hya",
+          "hip": 49841,
+          "raJ2000": 152.64701,
+          "decJ2000": -12.35408,
+          "vmag": 3.61
+        },
+        {
+          "name": "張宿三",
+          "westernName": "42Mu  Hya",
+          "hip": 51069,
+          "raJ2000": 156.52263,
+          "decJ2000": -16.83629,
+          "vmag": 3.83
+        },
+        {
+          "name": "張宿六",
+          "westernName": "Phi3Hya",
+          "hip": 52085,
+          "raJ2000": 159.64565,
+          "decJ2000": -16.87657,
+          "vmag": 4.91
+        },
+        {
+          "name": "張宿五",
+          "westernName": "38Kap Hya",
+          "hip": 47452,
+          "raJ2000": 145.07652,
+          "decJ2000": -14.33229,
+          "vmag": 5.07
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ]
+    },
+    "翼": {
+      "stars": [
+        {
+          "name": "翼宿一",
+          "westernName": "Alkes (7Alp Crt)",
+          "hip": 53740,
+          "raJ2000": 164.94366,
+          "decJ2000": -18.29878,
+          "vmag": 4.08
+        },
+        {
+          "name": "翼宿二",
+          "westernName": "15Gam Crt",
+          "hip": 55705,
+          "raJ2000": 171.22053,
+          "decJ2000": -17.68401,
+          "vmag": 4.06
+        },
+        {
+          "name": "翼宿三",
+          "westernName": "27Zet Crt",
+          "hip": 57283,
+          "raJ2000": 176.19073,
+          "decJ2000": -18.35067,
+          "vmag": 4.71
+        },
+        {
+          "name": "翼宿四",
+          "westernName": "13Lam Crt",
+          "hip": 55598,
+          "raJ2000": 170.84123,
+          "decJ2000": -18.77997,
+          "vmag": 5.08
+        },
+        {
+          "name": "翼宿五",
+          "westernName": "Nu  Hya",
+          "hip": 52943,
+          "raJ2000": 162.40618,
+          "decJ2000": -16.19365,
+          "vmag": 3.11
+        },
+        {
+          "name": "翼宿六",
+          "westernName": "30Eta Crt",
+          "hip": 58188,
+          "raJ2000": 179.00399,
+          "decJ2000": -17.15083,
+          "vmag": 5.17
+        },
+        {
+          "name": "翼宿七",
+          "westernName": "12Del Crt",
+          "hip": 55282,
+          "raJ2000": 169.83521,
+          "decJ2000": -14.77854,
+          "vmag": 3.56
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          6
+        ]
+      ]
+    },
+    "軫": {
+      "stars": [
+        {
+          "name": "軫宿一",
+          "westernName": "Gienah (4Gam Crv)",
+          "hip": 59803,
+          "raJ2000": 183.95155,
+          "decJ2000": -17.54193,
+          "vmag": 2.58
+        },
+        {
+          "name": "軫宿二",
+          "westernName": "2Eps Crv",
+          "hip": 59316,
+          "raJ2000": 182.53119,
+          "decJ2000": -22.61977,
+          "vmag": 3.02
+        },
+        {
+          "name": "軫宿三",
+          "westernName": "Algorab (7Del Crv)",
+          "hip": 60965,
+          "raJ2000": 187.46608,
+          "decJ2000": -16.51543,
+          "vmag": 2.94
+        },
+        {
+          "name": "軫宿四",
+          "westernName": "Kraz (9Bet Crv)",
+          "hip": 61359,
+          "raJ2000": 188.59681,
+          "decJ2000": -23.39676,
+          "vmag": 2.65
+        }
+      ],
+      "lines": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ]
+      ]
+    }
+  }
+}

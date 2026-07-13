@@ -1,0 +1,22 @@
+{
+  "name": "digital-armillary",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "gen:stars": "node scripts/generate-star-data.mjs",
+    "verify:stage1": "node scripts/verify-stage1.mjs"
+  },
+  "dependencies": {
+    "astronomy-engine": "^2.1.19",
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@types/three": "^0.185.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.4"
+  }
+}

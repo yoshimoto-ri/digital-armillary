@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>數位渾象 — 立體宇宙星圖</title>
+    <style>
+      /* 全域 reset 與深色星空底；元件樣式各自於 ui/ 模組內注入 */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; overflow: hidden; background: #04060f; }
+      body {
+        color: #c8d2e8;
+        font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans TC', system-ui, sans-serif;
+        font-size: 14px;
+      }
+      #app { position: fixed; inset: 0; }
+      #scene-root { position: absolute; inset: 0; }
+      #scene-root canvas { display: block; }
+      #label-root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+      #ui-root { position: absolute; inset: 0; pointer-events: none; }
+      #ui-root > * { pointer-events: auto; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="scene-root"></div>
+      <div id="label-root"></div>
+      <div id="ui-root"></div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
