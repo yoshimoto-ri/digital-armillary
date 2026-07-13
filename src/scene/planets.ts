@@ -42,7 +42,6 @@ export class Planets {
 
   /** 依時刻更新所有行星位置（日心視角、√ 壓縮） */
   update(time: AstroTime): void {
-    const earthNode = this.nodes.get('earth')!;
     for (const node of this.nodes.values()) {
       const { spec, mesh } = node;
       if (spec.body === Body.Sun) {
@@ -50,15 +49,17 @@ export class Planets {
         continue;
       }
       if (spec.body === Body.Moon) {
-        // 月球：貼著地球，方向取真實地心向量、距離示意
+        // 月球：貼著地球，方向取真實地心向量、距離示意。
+        // 地球位置直接向引擎取值計算，不讀地球 mesh（避免依賴 Map 迭代順序）。
         const gv = geoVec(Body.Moon, time);
-        if (!gv || !earthNode.available) {
+        const ev = helioVec(Body.Earth, time);
+        if (!gv || !ev) {
           node.available = false;
           mesh.visible = false;
           continue;
         }
         const dir = eqjToScene(gv).normalize().multiplyScalar(MOON_OFFSET_UNITS);
-        mesh.position.copy(earthNode.mesh.position).add(dir);
+        compressToScene(ev, mesh.position).add(dir);
         node.available = true;
         continue;
       }
