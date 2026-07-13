@@ -1,5 +1,5 @@
 import { store } from '../state/store';
-import { clampDate, MAX_DATE, MIN_DATE } from '../astro/time';
+import { clampDate, formatAstronomicalYear, MAX_DATE, MIN_DATE } from '../astro/time';
 
 /** 播放速率檔位（模擬日／真實秒）。100 年/秒供觀察歲差漂移。 */
 const SPEEDS: { label: string; daysPerSec: number }[] = [
@@ -12,11 +12,6 @@ const SPEEDS: { label: string; daysPerSec: number }[] = [
 
 const MIN_YEAR = MIN_DATE.getUTCFullYear();
 const MAX_YEAR = MAX_DATE.getUTCFullYear();
-
-/** 天文年 → 顯示字串（年 0 = 西元前 1 年） */
-function formatYear(y: number): string {
-  return y > 0 ? `西元 ${y} 年` : `西元前 ${1 - y} 年`;
-}
 
 /** 時間軸列：播放/暫停、速率、年份滑桿（西元前 1000 – 西元 5000） */
 export function createTimeline(root: HTMLElement): void {
@@ -53,7 +48,7 @@ export function createTimeline(root: HTMLElement): void {
 
   const syncFromState = (d: Date) => {
     slider.value = String(d.getUTCFullYear());
-    readout.textContent = formatYear(d.getUTCFullYear());
+    readout.textContent = formatAstronomicalYear(d.getUTCFullYear());
   };
   syncFromState(store.get().time);
 

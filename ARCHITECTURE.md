@@ -151,8 +151,8 @@ interface AppState {
 }
 ```
 
-（未來擴充保留：`geoSubMode: 'free' | 'eclipticLock'` 鎖定黃道帶視線、
-`precessionCompare` 歲差對照環——見 §7.6。）
+（另有 `compareYear: number` 歲差對照時刻與 `layers.precessionCompare`——見 §7.6。
+未來擴充保留：`geoSubMode: 'free' | 'eclipticLock'` 鎖定黃道帶視線。）
 
 更新流程：`ui/` 呼叫 `store.set(...)` → 訂閱者（`scene/`、`sidebar`）收到變更 → 重算/重繪。
 渲染迴圈只在狀態變更或播放中才更新位置（靜止時不重算星曆，省電且穩 60fps）。
@@ -280,9 +280,11 @@ astronomy-engine 不含彗星星曆，依規格以軌道根數作**二體克卜�
   較行星窄；模擬時刻超出引擎支援範圍時隱藏冥王星並於 UI 註記，不讓引擎拋錯
   （實作時以引擎實際拋錯範圍為準寫防護）。
 
-### 7.6 歲差對照模式（階段三）
-同屏繪製兩組十二宮分區環：一組依當前時刻春分點、一組依對照時刻（預設西元前 100 年，
-可調）。使用者點選任一宿，側欄顯示該宿距星在兩個時刻各落在哪一宮。
+### 7.6 歲差對照模式
+同屏繪製兩組十二宮分區環：一組依當前時刻春分點（紫色系，隨時間軸漂移）、
+一組依對照時刻（暖橙色系，預設西元前 100 年，可調，固定不動）。宮名上下錯開
+（+12° / −16°）避免重疊。使用者點選任一宿，側欄顯示該宿距星在兩個時刻各落在哪一宮。
+實作：`scene/precession.ts`，幾何同樣經 `Rotation_ECT_EQJ(對照時刻)` 投影回 EQJ。
 
 ### 7.7 時間軸
 - 範圍：西元前 1000-01-01 至西元 5000-12-31（astronomy-engine 可算範圍內夾限）。
@@ -334,4 +336,5 @@ astronomy-engine 不含彗星星曆，依規格以軌道根數作**二體克卜�
 |---|---|
 | 一 | `astro/{time,ephemeris,frames,retrograde,mansions,zodiac}`、`data/*`、`scene/{engine,celestialSphere,planets,orbits,scale}`、`ui/{controlBar,sidebar}`；三王星於日心視角上線（虛線軌道、發現年標注、開關預設開） |
 | 二 | `scene/{overlays,comets,modes/helioMode,modes/geoMode}`、`astro/comets`、`data/comets`、`ui/timeline`、視角切換與側欄擴充；三王星於地心視角預設隱藏（可開）；**時間軸與彗星自階段三提前納入本階段交付** |
-| 三（剩餘） | 歲差對照環（§7.6，兩組十二宮環同屏對照）、`geoSubMode` 鎖定黃道帶 |
+| 三 | `scene/precession.ts` 歲差對照環（§7.6）、對照年 UI 與側欄兩時刻對照 |
+| 未來擴充 | `geoSubMode` 鎖定黃道帶、漢代距星對照模式、恆星自行 |

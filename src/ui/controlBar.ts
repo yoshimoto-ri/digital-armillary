@@ -64,6 +64,30 @@ export function createControlBar(root: HTMLElement): void {
   const eqT = makeToggle('天赤道', layers.equatorLine, (v) => store.setLayer({ equatorLine: v }));
   const zodT = makeToggle('十二宮', layers.zodiacBands, (v) => store.setLayer({ zodiacBands: v }));
   const cometT = makeToggle('彗星', layers.comets, (v) => store.setLayer({ comets: v }));
+
+  // 歲差對照：開關 + 對照年輸入（負數 = 西元前，如 -100 = 西元前 100 年）
+  const compareInput = document.createElement('input');
+  compareInput.type = 'number';
+  compareInput.min = '-1000';
+  compareInput.max = '5000';
+  compareInput.step = '100';
+  compareInput.title = '對照年（負數 = 西元前）';
+  // 顯示慣例：西元前 N 年 = -N；天文年 = 1 - N（西元前 100 年 → 天文年 -99）
+  const astroToDisplay = (y: number) => (y > 0 ? y : y - 1);
+  const displayToAstro = (v: number) => (v > 0 ? v : v + 1);
+  compareInput.value = String(astroToDisplay(store.get().compareYear));
+  compareInput.disabled = !layers.precessionCompare;
+  compareInput.addEventListener('change', () => {
+    const v = Number(compareInput.value);
+    if (!Number.isFinite(v) || v === 0) return; // 無西元 0 年
+    const clamped = Math.max(-1000, Math.min(5000, v));
+    compareInput.value = String(clamped);
+    store.set({ compareYear: displayToAstro(clamped) });
+  });
+  const compareT = makeToggle('歲差對照', layers.precessionCompare, (v) => {
+    compareInput.disabled = !v;
+    store.setLayer({ precessionCompare: v });
+  });
   // 三王星開關綁定「目前視角」的旗標，切換視角時回讀該視角記住的狀態
   const modernT = makeToggle('現代三王星', layers.modernPlanetsHelio, (v) => {
     if (store.get().viewMode === 'helio') store.setLayer({ modernPlanetsHelio: v });
@@ -74,6 +98,7 @@ export function createControlBar(root: HTMLElement): void {
     modeWrap, dateInput, nowBtn,
     orbitsT.label, linesT.label, namesT.label,
     eclT.label, eqT.label, zodT.label, cometT.label, modernT.label,
+    compareT.label, compareInput,
   );
   root.appendChild(bar);
 

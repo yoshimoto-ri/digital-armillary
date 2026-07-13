@@ -1,12 +1,13 @@
 import * as THREE from 'three';
 import { store } from './state/store';
-import { clampDate, toAstroTime } from './astro/time';
+import { clampDate, dateFromAstronomicalYear, toAstroTime } from './astro/time';
 import { Engine } from './scene/engine';
 import { CelestialSphere } from './scene/celestialSphere';
 import { Planets } from './scene/planets';
 import { Orbits } from './scene/orbits';
 import { Comets } from './scene/comets';
 import { Overlays } from './scene/overlays';
+import { PrecessionCompare } from './scene/precession';
 import { applyHelioMode } from './scene/modes/helioMode';
 import { applyGeoMode } from './scene/modes/geoMode';
 import { injectStyles } from './ui/styles';
@@ -36,7 +37,10 @@ const planets = new Planets((key) => store.set({ selection: { type: 'planet', ke
 const orbits = new Orbits();
 const comets = new Comets((key) => store.set({ selection: { type: 'comet', key } }));
 const overlays = new Overlays();
-engine.scene.add(sphere.group, planets.group, orbits.group, comets.group, overlays.group);
+const precession = new PrecessionCompare();
+engine.scene.add(
+  sphere.group, planets.group, orbits.group, comets.group, overlays.group, precession.group,
+);
 
 // --- UI ---
 // 底部直向堆疊：時間軸列在上、控制列在下，高度自適應不互相遮擋
@@ -64,6 +68,10 @@ function refresh(): void {
   comets.applyVisibility(s.layers.comets, mode);
   overlays.update(t);
   overlays.applyVisibility(s.layers);
+  if (s.layers.precessionCompare) {
+    precession.update(s.compareYear, toAstroTime(dateFromAstronomicalYear(s.compareYear)));
+  }
+  precession.setVisible(s.layers.precessionCompare);
   sphere.setLinesVisible(s.layers.mansionLines);
   sphere.setLabelsVisible(s.layers.mansionLabels);
 }
@@ -75,7 +83,7 @@ function applyViewMode(): void {
 
 store.subscribe((_s, changed) => {
   if (changed.has('viewMode')) applyViewMode();
-  if (changed.has('time') || changed.has('layers') || changed.has('viewMode')) refresh();
+  if (changed.has('time') || changed.has('layers') || changed.has('viewMode') || changed.has('compareYear')) refresh();
 });
 applyViewMode();
 refresh();

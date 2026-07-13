@@ -20,6 +20,14 @@ export function injectStyles(): void {
     color: #e8c860; font-size: 12px; text-shadow: 0 0 4px #000;
     user-select: none; white-space: nowrap;
   }
+  .label-zodiac-compare {
+    color: #d8a878; font-size: 11px; text-shadow: 0 0 4px #000;
+    user-select: none; white-space: nowrap; opacity: 0.85;
+  }
+  .label-equinox-compare {
+    color: #e8a860; font-size: 11px; text-shadow: 0 0 4px #000;
+    user-select: none; white-space: nowrap;
+  }
   .label-comet {
     color: #b8e8e0; font-size: 11px; text-shadow: 0 0 4px #000;
     user-select: none; white-space: nowrap; opacity: 0.9;
@@ -38,6 +46,11 @@ export function injectStyles(): void {
   }
   .control-bar label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; white-space: nowrap; }
   .control-bar input[type="checkbox"] { accent-color: #4a7ab8; }
+  .control-bar input[type="number"] {
+    background: #0c1224; color: #c8d2e8; border: 1px solid #2a3a5a; border-radius: 5px;
+    padding: 3px 4px; font-family: inherit; font-size: 13px; width: 5.5em; color-scheme: dark;
+  }
+  .control-bar input[type="number"]:disabled { opacity: 0.4; }
   .control-bar input[type="datetime-local"] {
     background: #0c1224; color: #c8d2e8; border: 1px solid #2a3a5a; border-radius: 5px;
     padding: 3px 6px; font-family: inherit; font-size: 13px; color-scheme: dark;

@@ -20,6 +20,8 @@ export interface LayerState {
   zodiacBands: boolean;
   /** 彗星本體與軌道 */
   comets: boolean;
+  /** 歲差對照環：對照時刻的十二宮分區同屏顯示 */
+  precessionCompare: boolean;
   /** 現代三王星——兩個視角各自記住開關 */
   modernPlanetsHelio: boolean;
   modernPlanetsGeo: boolean;
@@ -32,6 +34,8 @@ export interface AppState {
   playing: boolean;
   /** 播放速率：模擬日／真實秒 */
   playSpeed: number;
+  /** 歲差對照時刻（天文年；-99 = 西元前 100 年） */
+  compareYear: number;
   layers: LayerState;
   selection: SelectedBody | null;
 }
@@ -44,6 +48,7 @@ const state: AppState = {
   viewMode: 'helio',
   playing: false,
   playSpeed: 1,
+  compareYear: -99,
   layers: {
     orbits: true,
     mansionLines: true,
@@ -52,6 +57,7 @@ const state: AppState = {
     equatorLine: true,
     zodiacBands: true,
     comets: true,
+    precessionCompare: false,
     modernPlanetsHelio: true,
     modernPlanetsGeo: false,
   },

@@ -1,5 +1,5 @@
 import { store } from '../state/store';
-import { toAstroTime } from '../astro/time';
+import { dateFromAstronomicalYear, formatAstronomicalYear, toAstroTime } from '../astro/time';
 import { geoEclipticLon } from '../astro/ephemeris';
 import { formatLon, starEclipticLonOfDate } from '../astro/frames';
 import { mansionBoundaries, mansionOf } from '../astro/mansions';
@@ -82,6 +82,13 @@ export function createSidebar(root: HTMLElement, mansionsFile: MansionsFile): vo
       rows.push(['視星等', m.vmag.toFixed(2)]);
       rows.push(['距星黃經', formatLon(lon)]);
       rows.push(['距星所在宮', zodiacOf(lon).name]);
+      // 歲差對照（§7.6）：同一距星在對照時刻落在哪一宮
+      const s = store.get();
+      if (s.layers.precessionCompare) {
+        const ct = toAstroTime(dateFromAstronomicalYear(s.compareYear));
+        const clon = starEclipticLonOfDate(m.raJ2000, m.decJ2000, ct);
+        rows.push([`${formatAstronomicalYear(s.compareYear)}所在宮`, zodiacOf(clon).name]);
+      }
     }
 
     el.innerHTML = '';
@@ -119,7 +126,7 @@ export function createSidebar(root: HTMLElement, mansionsFile: MansionsFile): vo
   };
 
   store.subscribe((_s, changed) => {
-    if (changed.has('selection') || changed.has('time')) render();
+    if (changed.has('selection') || changed.has('time') || changed.has('compareYear') || changed.has('layers')) render();
   });
   render();
 }
