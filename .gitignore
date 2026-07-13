@@ -1,0 +1,15 @@
+# 依賴與建置產出
+node_modules/
+dist/
+
+# 環境與編輯器
+.env
+.env.*
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# 日誌
+*.log
+npm-debug.log*
