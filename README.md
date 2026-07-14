@@ -95,6 +95,8 @@ subdomain with zero server-side configuration).
 - **Han vs. Qing determinative stars (距星)** — compare mansion boundary
   systems across dynasties (the data schema already reserves a `system` field)
 - **Bilingual UI** — Traditional Chinese / English
+- **Mobile interaction refinements** — touch-friendly controls and a more
+  compact layout for small screens
 - **Stellar proper motion** — free the stars from J2000
 - **Ecliptic-locked geocentric mode** — keep the zodiac band level while
   panning
