@@ -1,18 +1,40 @@
 import * as THREE from 'three';
 import { AstroTime, Body } from 'astronomy-engine';
 import type { ViewMode } from '../state/store';
-import { ALL_PLANETS, PlanetSpec } from '../data/planets';
+import { ALL_PLANETS, HAS_RETROGRADE, PlanetSpec } from '../data/planets';
 import { geoVec, helioVec } from '../astro/ephemeris';
+import { motionState } from '../astro/retrograde';
 import { compressToScene, directionToSphere, eqjToScene, R_GEO_BODIES } from './scale';
 import { makeLabel } from './labels';
 
 /** 月球在日心視角中的固定示意偏移量（場景單位）——方向真實、距離示意 */
 const MOON_OFFSET_UNITS = 9;
 
+/** 逆行光暈直徑相對行星本體直徑的倍數 */
+const GLOW_SCALE = 3.8;
+
+/** 逆行光暈貼圖（白色徑向漸層，各行星以材質 color 染成同色系）——全部 sprite 共用 */
+function makeGlowTexture(): THREE.Texture {
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const ctx = c.getContext('2d')!;
+  const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+  g.addColorStop(0, 'rgba(255,255,255,0.75)');
+  g.addColorStop(0.35, 'rgba(255,255,255,0.30)');
+  g.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 128, 128);
+  return new THREE.CanvasTexture(c);
+}
+
 interface PlanetNode {
   spec: PlanetSpec;
   mesh: THREE.Mesh;
   label: ReturnType<typeof makeLabel>;
+  /** 標籤原始文字；逆行時加註「·逆」後還原用 */
+  baseLabelText: string;
+  /** 逆行光暈（僅渾象視角逆行期間顯示） */
+  glow: THREE.Sprite | null;
   /** 引擎範圍外（如冥王星遠古時刻）為 false */
   available: boolean;
 }
@@ -23,6 +45,7 @@ export class Planets {
   private readonly nodes = new Map<string, PlanetNode>();
 
   constructor(onSelect: (key: string) => void) {
+    const glowTexture = makeGlowTexture();
     for (const spec of ALL_PLANETS) {
       const mesh = new THREE.Mesh(
         new THREE.SphereGeometry(spec.renderRadius, 24, 16),
@@ -36,8 +59,26 @@ export class Planets {
         onClick: () => onSelect(spec.key),
       });
       mesh.add(label);
+
+      // 逆行光暈：同色系柔光 sprite，掛在 mesh 下（隨渾象視角的 mesh scale 等比放大）
+      let glow: THREE.Sprite | null = null;
+      if (HAS_RETROGRADE.has(spec.key)) {
+        glow = new THREE.Sprite(
+          new THREE.SpriteMaterial({
+            map: glowTexture,
+            color: spec.color,
+            transparent: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending,
+          }),
+        );
+        glow.scale.setScalar(spec.renderRadius * 2 * GLOW_SCALE);
+        glow.visible = false;
+        mesh.add(glow);
+      }
+
       this.group.add(mesh);
-      this.nodes.set(spec.key, { spec, mesh, label, available: true });
+      this.nodes.set(spec.key, { spec, mesh, label, baseLabelText: labelText, glow, available: true });
     }
   }
 
@@ -111,6 +152,26 @@ export class Planets {
       const undiscovered = spec.discoveryYear != null && year < spec.discoveryYear;
       mat.opacity = undiscovered ? 0.3 : 1;
       node.label.element.classList.toggle('label-undiscovered', undiscovered);
+    }
+  }
+
+  /**
+   * 逆行標示（僅渾象視角——逆行是地心視覺現象，日心視角中行星皆順行，一律關閉）。
+   * 偵測：t±0.5 日地心視黃經中央差分（astro/retrograde.ts，含跨 0°/360° 最短角距
+   * 處理），黃經減少即逆行；暫停時同樣可判定，不依賴播放的前後幀。
+   * 播放速度分級：暫停或 ≤1 天/秒 → 光暈＋標籤「·逆」；快轉 → 只留標籤「·逆」。
+   */
+  applyRetrograde(time: AstroTime, mode: ViewMode, playing: boolean, playSpeed: number): void {
+    const inGeo = mode === 'geo';
+    const showGlow = !playing || playSpeed <= 1;
+    for (const node of this.nodes.values()) {
+      const { spec, mesh, glow, label } = node;
+      if (!HAS_RETROGRADE.has(spec.key)) continue;
+      const retro =
+        inGeo && node.available && mesh.visible && motionState(spec.body, time) === 'retrograde';
+      if (glow) glow.visible = retro && showGlow;
+      const text = retro ? `${node.baseLabelText}·逆` : node.baseLabelText;
+      if (label.element.textContent !== text) label.element.textContent = text;
     }
   }
 

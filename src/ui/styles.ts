@@ -101,6 +101,7 @@ export function injectStyles(): void {
   .notice {
     position: absolute; left: 14px; bottom: 14px; font-size: 11px; color: #5a6680;
     line-height: 1.6; pointer-events: none; text-shadow: 0 0 3px #000;
+    max-width: 340px;
   }
   .app-title {
     position: absolute; left: 16px; top: 12px; color: #a8b6d0; font-size: 15px;

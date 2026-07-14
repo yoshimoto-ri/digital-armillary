@@ -61,6 +61,7 @@ function refresh(): void {
   const showModern = mode === 'helio' ? s.layers.modernPlanetsHelio : s.layers.modernPlanetsGeo;
   planets.update(t, mode);
   planets.applyVisibility(showModern, year, mode);
+  planets.applyRetrograde(t, mode, s.playing, s.playSpeed);
   orbits.update(t);
   // 軌道線為 √ 壓縮之日心幾何，渾象視角一律隱藏
   orbits.applyVisibility(s.layers.orbits && mode === 'helio', showModern, year);
@@ -83,7 +84,10 @@ function applyViewMode(): void {
 
 store.subscribe((_s, changed) => {
   if (changed.has('viewMode')) applyViewMode();
-  if (changed.has('time') || changed.has('layers') || changed.has('viewMode') || changed.has('compareYear')) refresh();
+  if (
+    changed.has('time') || changed.has('layers') || changed.has('viewMode') ||
+    changed.has('compareYear') || changed.has('playing') || changed.has('playSpeed')
+  ) refresh();
 });
 applyViewMode();
 refresh();
