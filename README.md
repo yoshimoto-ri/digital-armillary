@@ -100,6 +100,15 @@ subdomain with zero server-side configuration).
   panning
 - **CI auto-deploy** — push-to-publish via GitHub Actions
 
+## Acknowledgments
+
+This project was built in close collaboration with **Claude Fable 5**
+(Anthropic), working through [Claude Code](https://claude.com/claude-code) —
+architecture design, implementation, browser-driven verification and
+documentation were developed in an AI pair-programming workflow, with project
+direction, review and deployment by Justin Lee. Commits carry
+`Co-Authored-By` trailers recording the collaboration.
+
 ## License
 
 Code is released under the [MIT License](LICENSE).
