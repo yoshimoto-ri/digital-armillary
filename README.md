@@ -3,7 +3,9 @@
 以三維視覺化呈現太陽系天體與中國二十八宿、黃道十二宮位置關係的純前端靜態網站。
 概念源自中國古代「渾象」，並以數位方式同時提供上帝視角（日心）與古代觀測者視角（地心）。
 
-架構設計見 [ARCHITECTURE.md](ARCHITECTURE.md)。
+**正式網址：<https://armillary.xianqiao.org>**
+
+架構設計見 [ARCHITECTURE.md](ARCHITECTURE.md)；開發進度與部署紀錄見 [PROGRESS.md](PROGRESS.md)。
 
 ## 開發
 
