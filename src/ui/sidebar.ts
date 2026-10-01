@@ -1,7 +1,7 @@
 import { store } from '../state/store';
 import { dateFromAstronomicalYear, formatAstronomicalYear, toAstroTime } from '../astro/time';
 import { geoEclipticLon } from '../astro/ephemeris';
-import { formatLon, starEclipticLonOfDate } from '../astro/frames';
+import { formatLon, starEclipticLonJ2000, starEclipticLonOfDate } from '../astro/frames';
 import { mansionBoundaries, mansionOf } from '../astro/mansions';
 import { zodiacOf } from '../astro/zodiac';
 import { motionState } from '../astro/retrograde';
@@ -9,6 +9,7 @@ import { cometGeoEclipticLon, cometHelioDistance } from '../astro/comets';
 import { ALL_PLANETS, HAS_RETROGRADE } from '../data/planets';
 import { COMETS } from '../data/comets';
 import type { MansionsFile } from '../data/types';
+import { DISTAR_FILE, distarOverrideOf } from '../data/distarSystems';
 
 /** 儒略日 → UTC 年月日字串 */
 function jdToDateString(jd: number): string {
@@ -89,6 +90,22 @@ export function createSidebar(root: HTMLElement, mansionsFile: MansionsFile): vo
         const clon = starEclipticLonOfDate(m.raJ2000, m.decJ2000, ct);
         rows.push([`${formatAstronomicalYear(s.compareYear)}所在宮`, zodiacOf(clon).name]);
       }
+      // 歷代距星對照（§7.9）：此宿距星在漢／明系統與清基準不同者逐列顯示
+      const DU = 360 / 365.25;
+      const baseLon = starEclipticLonJ2000(m.raJ2000, m.decJ2000);
+      for (const sys of DISTAR_FILE.systems) {
+        if (sys.id === 'qing') continue;
+        const o = distarOverrideOf(sys, m.name);
+        if (!o || o.hip === m.hip) continue;
+        let d = (starEclipticLonJ2000(o.raJ2000, o.decJ2000) - baseLon) / DU;
+        if (d > 180 / DU) d -= 360 / DU;
+        if (d < -180 / DU) d += 360 / DU;
+        const uncertain = sys.uncertain?.includes(m.name) ? '（考證存疑）' : '';
+        rows.push([
+          `${sys.label}距星`,
+          `${o.detStarName}（${o.westernName}）${uncertain}，差 ${d >= 0 ? '+' : ''}${d.toFixed(1)} 古度`,
+        ]);
+      }
     }
 
     el.innerHTML = '';
@@ -120,7 +137,12 @@ export function createSidebar(root: HTMLElement, mansionsFile: MansionsFile): vo
     if (selection.type === 'mansion') {
       const p = document.createElement('div');
       p.className = 'src';
-      p.textContent = '距星依清《儀象考成》系統；黃經為當日黃道座標。';
+      const hasHistory = DISTAR_FILE.systems.some(
+        (sys) => sys.id !== 'qing' && distarOverrideOf(sys, selection.key) != null,
+      );
+      p.textContent = hasHistory
+        ? '距星依清《儀象考成》系統；經《漢書·律曆志》距度驗證，清距星與漢代實測相合，「宿一」為明末距星之編號化石。'
+        : '距星依清《儀象考成》系統（經《漢書·律曆志》距度驗證，與漢代距星相同）；黃經為當日黃道座標。';
       el.appendChild(p);
     }
   };

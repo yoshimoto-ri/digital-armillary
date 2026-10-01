@@ -28,6 +28,10 @@ export function injectStyles(): void {
     color: #e8a860; font-size: 11px; text-shadow: 0 0 4px #000;
     user-select: none; white-space: nowrap;
   }
+  .label-distar-compare {
+    color: #f0906e; font-size: 11px; text-shadow: 0 0 4px #000;
+    user-select: none; white-space: nowrap;
+  }
   .label-comet {
     color: #b8e8e0; font-size: 11px; text-shadow: 0 0 4px #000;
     user-select: none; white-space: nowrap; opacity: 0.9;

@@ -24,6 +24,39 @@ export interface MansionsFile {
   mansions: Mansion[];
 }
 
+/** 距星系統識別（distarSystems.json）：清《儀象考成》＝基準；漢《石氏》；明《崇禎曆書》 */
+export type DistarSystemId = 'qing' | 'han' | 'ming';
+
+/** 單一宿的距星覆寫（與基準不同者才列） */
+export interface DistarOverride {
+  /** 宿名（單字，對應 Mansion.name） */
+  mansionName: string;
+  detStarName: string;
+  westernName: string;
+  hip: number;
+  raJ2000: number;
+  decJ2000: number;
+  vmag: number;
+}
+
+export interface DistarSystem {
+  id: DistarSystemId;
+  /** 顯示名（如「明《崇禎曆書》」） */
+  label: string;
+  periodNote: string;
+  note: string;
+  /** 考證存疑的宿名清單 */
+  uncertain?: string[];
+  overrides: DistarOverride[];
+}
+
+export interface DistarSystemsFile {
+  source: string;
+  /** 《漢書·律曆志》距度驗證結論（README/側欄引用） */
+  finding: string;
+  systems: DistarSystem[];
+}
+
 /** 星官亮星（mansionStars.json） */
 export interface MansionStar {
   name: string;

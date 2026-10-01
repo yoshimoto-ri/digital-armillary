@@ -1,5 +1,7 @@
 import { store } from '../state/store';
 import { clampDate } from '../astro/time';
+import { DISTAR_FILE } from '../data/distarSystems';
+import type { DistarSystemId } from '../data/types';
 
 /** 底部控制列：視角切換 + 日期選擇 + 圖層開關。改狀態 → scene 訂閱重繪。 */
 export function createControlBar(root: HTMLElement): void {
@@ -88,6 +90,27 @@ export function createControlBar(root: HTMLElement): void {
     compareInput.disabled = !v;
     store.setLayer({ precessionCompare: v });
   });
+  // 宿界對照：開關 + 對照距星系統下拉（基準恆為清《儀象考成》）
+  const distarSelect = document.createElement('select');
+  distarSelect.title = '對照距星系統（基準＝清《儀象考成》，青色宿界）';
+  for (const sys of DISTAR_FILE.systems) {
+    if (sys.id === 'qing') continue;
+    const opt = document.createElement('option');
+    opt.value = sys.id;
+    opt.textContent = sys.label;
+    distarSelect.appendChild(opt);
+  }
+  distarSelect.value = store.get().distarCompareSystem;
+  distarSelect.disabled = !layers.distarCompare;
+  distarSelect.addEventListener('change', () => {
+    store.set({ distarCompareSystem: distarSelect.value as Exclude<DistarSystemId, 'qing'> });
+  });
+  const distarT = makeToggle('宿界對照', layers.distarCompare, (v) => {
+    distarSelect.disabled = !v;
+    store.setLayer({ distarCompare: v });
+  });
+  distarT.label.title = '同屏顯示清《儀象考成》宿界（青）與對照系統距星差異（橙）；宿界綁定恆星，不隨歲差漂移';
+
   // 三王星開關綁定「目前視角」的旗標，切換視角時回讀該視角記住的狀態
   const modernT = makeToggle('現代三王星', layers.modernPlanetsHelio, (v) => {
     if (store.get().viewMode === 'helio') store.setLayer({ modernPlanetsHelio: v });
@@ -99,6 +122,7 @@ export function createControlBar(root: HTMLElement): void {
     orbitsT.label, linesT.label, namesT.label,
     eclT.label, eqT.label, zodT.label, cometT.label, modernT.label,
     compareT.label, compareInput,
+    distarT.label, distarSelect,
   );
   root.appendChild(bar);
 

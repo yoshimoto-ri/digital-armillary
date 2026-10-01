@@ -151,7 +151,8 @@ interface AppState {
 }
 ```
 
-（另有 `compareYear: number` 歲差對照時刻與 `layers.precessionCompare`——見 §7.6。
+（另有 `compareYear: number` 歲差對照時刻與 `layers.precessionCompare`——見 §7.6；
+`distarCompareSystem: 'han' | 'ming'` 與 `layers.distarCompare` 宿界對照——見 §7.9。
 未來擴充保留：`geoSubMode: 'free' | 'eclipticLock'` 鎖定黃道帶視線。）
 
 更新流程：`ui/` 呼叫 `store.set(...)` → 訂閱者（`scene/`、`sidebar`）收到變更 → 重算/重繪。
@@ -222,6 +223,30 @@ schema 保留 `system` 欄位，未來可加入漢代距星作對照模式：
   恩克（2P，週期最短 3.3 年）、斯威夫特–塔特爾（109P，英仙座流星雨母體）、
   海爾–博普（C/1995 O1，1997 大彗星）。每筆含中文名、歷史備註。
 
+### 6.5 `distarSystems.json` — 距星三系統對照表
+
+基準＝清《儀象考成》（即 mansions.json 全表），本檔僅記錄各系統與基準**不同**的
+距星覆寫（overrides），座標與全站同源（HYG v4.1，取自 mansionStars.json）：
+
+```jsonc
+{
+  "source": "…完整考證出處…",
+  "finding": "…《漢書·律曆志》距度驗證結論…",
+  "systems": [
+    { "id": "qing", "label": "清《儀象考成》", "overrides": [] },      // 基準
+    { "id": "han",  "label": "漢《石氏》", "uncertain": ["觜"],
+      "overrides": [ { "mansionName": "觜", "detStarName": "觜宿一", "hip": 26207, … } ] },
+    { "id": "ming", "label": "明《崇禎曆書》",
+      "overrides": [ /* 奎→η And、觜→λ Ori、參→ζ Ori */ ] }
+  ]
+}
+```
+
+考證方法與結論（詳 `scripts/verify-distars.mjs`，可重跑）：以《漢書·律曆志》
+二十八宿距度（合計 365¼ 古度）為裁判，引擎回推漢代曆元逐宿擬合——
+**漢距星與清系統實質相同**（平均誤差 0.49 古度；「宿一」編號為明末距星化石，
+清代「改距星」乃回歸漢代實測）；觜宿 λ/φ¹ 漢代僅差 0.35 古度無法分辨，標存疑。
+
 ## 7. 關鍵演算法設計
 
 ### 7.1 七曜位置
@@ -286,6 +311,21 @@ astronomy-engine 不含彗星星曆，依規格以軌道根數作**二體克卜�
   較行星窄；模擬時刻超出引擎支援範圍時隱藏冥王星並於 UI 註記，不讓引擎拋錯
   （實作時以引擎實際拋錯範圍為準寫防護）。
 
+### 7.9 宿界對照模式（距星三系統）
+
+同屏繪製兩組宿界刻線：清《儀象考成》28 條（青色，基準）與對照距星系統
+（漢《石氏》／明《崇禎曆書》，UI 下拉選擇，預設明）有差異之宿的宿界
+（橙紅色，標籤含宿名、系統、與基準差距古度、存疑註記）。
+
+- 宿界**綁定恆星**：以距星的 J2000 平黃道黃經劃線
+  （`frames.starEclipticLonJ2000` / `eclJ2000ToEqj`，`Rotation_EQJ_ECL` 時間無關），
+  幾何固定於 EQJ、不隨時間軸變動——播放歲差時宮界漂移而宿界不動，
+  與 §7.6 歲差對照（框架之變）互補，本模式呈現的是**劃界約定之變**。
+- 物理運行計算零改動：距星系統為人為約定，屬純顯示層疊圖（`scene/distarCompare.ts`），
+  幾何僅於對照系統切換時重建。
+- 側欄：點選奎／觜／參等有歷代差異之宿，逐列顯示各系統距星與差距古度，
+  並附《漢書·律曆志》驗證結論一行。
+
 ### 7.6 歲差對照模式
 同屏繪製兩組十二宮分區環：一組依當前時刻春分點（紫色系，隨時間軸漂移）、
 一組依對照時刻（暖橙色系，預設西元前 100 年，可調，固定不動）。宮名上下錯開
@@ -343,4 +383,5 @@ astronomy-engine 不含彗星星曆，依規格以軌道根數作**二體克卜�
 | 一 | `astro/{time,ephemeris,frames,retrograde,mansions,zodiac}`、`data/*`、`scene/{engine,celestialSphere,planets,orbits,scale}`、`ui/{controlBar,sidebar}`；三王星於日心視角上線（虛線軌道、發現年標注、開關預設開） |
 | 二 | `scene/{overlays,comets,modes/helioMode,modes/geoMode}`、`astro/comets`、`data/comets`、`ui/timeline`、視角切換與側欄擴充；三王星於地心視角預設隱藏（可開）；**時間軸與彗星自階段三提前納入本階段交付** |
 | 三 | `scene/precession.ts` 歲差對照環（§7.6）、對照年 UI 與側欄兩時刻對照 |
-| 未來擴充 | `geoSubMode` 鎖定黃道帶、漢代距星對照模式、恆星自行 |
+| 上線後迭代 | 逆行標示（§7.2）、距星三系統與宿界對照（§6.5／§7.9，`scene/distarCompare.ts`） |
+| 未來擴充 | `geoSubMode` 鎖定黃道帶、恆星自行 |

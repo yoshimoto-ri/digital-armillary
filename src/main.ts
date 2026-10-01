@@ -8,6 +8,8 @@ import { Orbits } from './scene/orbits';
 import { Comets } from './scene/comets';
 import { Overlays } from './scene/overlays';
 import { PrecessionCompare } from './scene/precession';
+import { DistarCompare } from './scene/distarCompare';
+import { distarSystemById } from './data/distarSystems';
 import { applyHelioMode } from './scene/modes/helioMode';
 import { applyGeoMode } from './scene/modes/geoMode';
 import { injectStyles } from './ui/styles';
@@ -38,8 +40,10 @@ const orbits = new Orbits();
 const comets = new Comets((key) => store.set({ selection: { type: 'comet', key } }));
 const overlays = new Overlays();
 const precession = new PrecessionCompare();
+const distarCompare = new DistarCompare();
 engine.scene.add(
   sphere.group, planets.group, orbits.group, comets.group, overlays.group, precession.group,
+  distarCompare.group,
 );
 
 // --- UI ---
@@ -73,6 +77,10 @@ function refresh(): void {
     precession.update(s.compareYear, toAstroTime(dateFromAstronomicalYear(s.compareYear)));
   }
   precession.setVisible(s.layers.precessionCompare);
+  if (s.layers.distarCompare) {
+    distarCompare.build(mansionsFile.mansions, distarSystemById(s.distarCompareSystem));
+  }
+  distarCompare.setVisible(s.layers.distarCompare);
   sphere.setLinesVisible(s.layers.mansionLines);
   sphere.setLabelsVisible(s.layers.mansionLabels);
 }
@@ -86,7 +94,8 @@ store.subscribe((_s, changed) => {
   if (changed.has('viewMode')) applyViewMode();
   if (
     changed.has('time') || changed.has('layers') || changed.has('viewMode') ||
-    changed.has('compareYear') || changed.has('playing') || changed.has('playSpeed')
+    changed.has('compareYear') || changed.has('playing') || changed.has('playSpeed') ||
+    changed.has('distarCompareSystem')
   ) refresh();
 });
 applyViewMode();

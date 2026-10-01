@@ -1,5 +1,7 @@
 /** 集中狀態 + 型別化 pub/sub（ARCHITECTURE.md §5）。無外部依賴。 */
 
+import type { DistarSystemId } from '../data/types';
+
 export type ViewMode = 'helio' | 'geo';
 
 export interface SelectedBody {
@@ -22,6 +24,8 @@ export interface LayerState {
   comets: boolean;
   /** 歲差對照環：對照時刻的十二宮分區同屏顯示 */
   precessionCompare: boolean;
+  /** 宿界對照：清《儀象考成》宿界 + 對照距星系統差異同屏顯示（§7.9） */
+  distarCompare: boolean;
   /** 現代三王星——兩個視角各自記住開關 */
   modernPlanetsHelio: boolean;
   modernPlanetsGeo: boolean;
@@ -36,6 +40,8 @@ export interface AppState {
   playSpeed: number;
   /** 歲差對照時刻（天文年；-99 = 西元前 100 年） */
   compareYear: number;
+  /** 宿界對照的對照距星系統（基準恆為清《儀象考成》） */
+  distarCompareSystem: Exclude<DistarSystemId, 'qing'>;
   layers: LayerState;
   selection: SelectedBody | null;
 }
@@ -49,6 +55,7 @@ const state: AppState = {
   playing: false,
   playSpeed: 1,
   compareYear: -99,
+  distarCompareSystem: 'ming',
   layers: {
     orbits: true,
     mansionLines: true,
@@ -58,6 +65,7 @@ const state: AppState = {
     zodiacBands: true,
     comets: true,
     precessionCompare: false,
+    distarCompare: false,
     modernPlanetsHelio: true,
     modernPlanetsGeo: false,
   },

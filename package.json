@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "gen:stars": "node scripts/generate-star-data.mjs",
     "verify:stage1": "node scripts/verify-stage1.mjs",
-    "verify:stage2": "node scripts/verify-stage2.mjs"
+    "verify:stage2": "node scripts/verify-stage2.mjs",
+    "verify:distars": "node scripts/verify-distars.mjs"
   },
   "dependencies": {
     "astronomy-engine": "^2.1.19",

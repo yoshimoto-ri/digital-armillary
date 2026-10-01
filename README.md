@@ -28,6 +28,14 @@ computational precision.
 - **Precession comparison rings** — overlay the zodiac divisions of any two
   epochs (default: 100 BC vs. today) and see, per mansion, which sign its
   determinative star occupied in each era
+- **Three determinative-star systems (距星三系統)** — Han (Shi Shi), late-Ming
+  (Chongzhen calendar reform) and Qing (Yixiang Kaocheng) mansion-boundary
+  conventions, with an overlay comparing where each era drew the boundaries.
+  Verified against the Han-dynasty measured mansion widths recorded in the
+  *Book of Han* (《漢書·律曆志》): the Qing determinative stars reproduce the
+  Han measurements (mean error 0.49 gudu) — the Qing "re-assignment" was in
+  fact a restoration of the Han-era stars, while the "-1" star numbering
+  fossilizes the late-Ming convention (`npm run verify:distars`)
 - **Retrograde motion indicators** — speed-adaptive glow and labels in the
   geocentric view (retrograde motion is a geocentric phenomenon, so the
   heliocentric view stays clean)
@@ -58,6 +66,7 @@ npm run build          # static build to dist/
 npm run preview        # preview the build
 npm run verify:stage1  # ephemeris check: Jupiter's ecliptic longitude
 npm run verify:stage2  # comet propagation & frame-transform checks
+npm run verify:distars # determinative-star systems vs Han-dynasty measured widths
 npm run gen:stars      # regenerate star data (see script for inputs)
 ```
 
@@ -92,8 +101,6 @@ subdomain with zero server-side configuration).
 
 ## Roadmap
 
-- **Han vs. Qing determinative stars (距星)** — compare mansion boundary
-  systems across dynasties (the data schema already reserves a `system` field)
 - **Bilingual UI** — Traditional Chinese / English
 - **Mobile interaction refinements** — touch-friendly controls and a more
   compact layout for small screens
