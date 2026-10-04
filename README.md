@@ -105,13 +105,6 @@ log ([PROGRESS.md](PROGRESS.md)) are written in Traditional Chinese.
 (`base: './'`) — upload to any static host (the live site runs on a Hostinger
 subdomain with zero server-side configuration).
 
-## Roadmap
-
-- **Stellar proper motion** — free the stars from J2000
-- **Ecliptic-locked geocentric mode** — keep the zodiac band level while
-  panning
-- **CI auto-deploy** — push-to-publish via GitHub Actions
-
 ## Acknowledgments
 
 This project was built in close collaboration with **Claude Fable 5**

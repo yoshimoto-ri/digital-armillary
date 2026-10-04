@@ -152,8 +152,7 @@ interface AppState {
 ```
 
 （另有 `compareYear: number` 歲差對照時刻與 `layers.precessionCompare`——見 §7.6；
-`distarCompareSystem: 'han' | 'ming'` 與 `layers.distarCompare` 宿界對照——見 §7.9。
-未來擴充保留：`geoSubMode: 'free' | 'eclipticLock'` 鎖定黃道帶視線。）
+`distarCompareSystem: 'han' | 'ming'` 與 `layers.distarCompare` 宿界對照——見 §7.9。）
 
 更新流程：`ui/` 呼叫 `store.set(...)` → 訂閱者（`scene/`、`sidebar`）收到變更 → 重算/重繪。
 渲染迴圈只在狀態變更或播放中才更新位置（靜止時不重算星曆，省電且穩 60fps）。
@@ -360,7 +359,7 @@ astronomy-engine 不含彗星星曆，依規格以軌道根數作**二體克卜�
 ## 9. 已知限制（誠實標注於 UI 與本文件）
 
 1. **恆星自行忽略**：第一版恆星固定於 J2000 位置。對 ±3000 年時間尺度，
-   多數亮星自行影響 < 1°，但心宿二等近距星會有可見偏差。列入未來擴充。
+   多數亮星自行影響 < 1°，但心宿二等近距星會有可見偏差。此為已知限制，不影響宿界與歲差的展示目的。
 2. **astronomy-engine 高精度範圍 1700–2200 年**：範圍外精度遞減，UI 常駐註明。
 3. **彗星未含攝動**：二體推算，遠離各自曆元誤差增大
    （哈雷 2061 回歸以此推算與含攝動預測相差數週）。
@@ -392,5 +391,4 @@ astronomy-engine 不含彗星星曆，依規格以軌道根數作**二體克卜�
 | 一 | `astro/{time,ephemeris,frames,retrograde,mansions,zodiac}`、`data/*`、`scene/{engine,celestialSphere,planets,orbits,scale}`、`ui/{controlBar,sidebar}`；三王星於日心視角上線（虛線軌道、發現年標注、開關預設開） |
 | 二 | `scene/{overlays,comets,modes/helioMode,modes/geoMode}`、`astro/comets`、`data/comets`、`ui/timeline`、視角切換與側欄擴充；三王星於地心視角預設隱藏（可開）；**時間軸與彗星自階段三提前納入本階段交付** |
 | 三 | `scene/precession.ts` 歲差對照環（§7.6）、對照年 UI 與側欄兩時刻對照 |
-| 上線後迭代 | 逆行標示（§7.2）、距星三系統與宿界對照（§6.5／§7.9，`scene/distarCompare.ts`） |
-| 未來擴充 | `geoSubMode` 鎖定黃道帶、恆星自行 |
+| 上線後迭代 | 逆行標示（§7.2）、距星三系統與宿界對照（§6.5／§7.9，`scene/distarCompare.ts`）、雙語介面與手機版（§7.10） |

@@ -98,8 +98,3 @@
   日期與圖層開關展開才出現；未啟用的對照年份／系統下拉暫時收起；
   橫持改單列壓縮、圖層面板與側欄改右側浮動
 - 修正：`#label-root { z-index: 0 }`，標籤不再浮在控制列之上（CSS2DRenderer 會設大 z-index）
-
-## 未來擴充（備選）
-- `geoSubMode` 鎖定黃道帶視線
-- 恆星自行（proper motion）
-- GitHub Actions 自動部署（push 即 FTP 上傳 Hostinger）
