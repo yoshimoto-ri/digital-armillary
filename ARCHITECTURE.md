@@ -41,7 +41,7 @@
 ```
 
 - `astro/` 是**唯一** import `astronomy-engine` 的地方。渲染層與 UI 層永遠不直接呼叫星曆引擎。
-- `scene/` 與 `ui/` 互不 import，透過 `state/` 的 store 溝通（UI 改狀態 → scene 訂閱重繪）。
+- `scene/` 與 `ui/` 互不 import，透過 `state/` 的 store 溝通（UI 改狀態 → scene 訂閱重繪）。 `i18n/` 為與 `state/` 同級的共用模組（scene 與 ui 皆可 import，僅依賴 store）。
 - `data/` 為靜態 JSON 與其型別、載入器，不含計算邏輯。
 
 ### 目錄結構
