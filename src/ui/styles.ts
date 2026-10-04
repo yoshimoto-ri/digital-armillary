@@ -106,7 +106,7 @@ export function injectStyles(): void {
 
   /* 桌面：說明文字置於左側欄（語言鈕下方），固定寬度自動換行，中英文都不會壓到底部控制區 */
   .notice {
-    position: absolute; left: 16px; top: 92px; width: 250px; font-size: 11px; color: #6a7690;
+    position: absolute; left: 16px; top: 88px; width: 250px; font-size: 11px; color: #6a7690;
     line-height: 1.6; pointer-events: none; text-shadow: 0 0 3px #000;
     background: rgba(4, 6, 15, 0.6); border-radius: 8px; padding: 8px 10px;
   }
@@ -118,13 +118,21 @@ export function injectStyles(): void {
 
   /* ---- 桌面：新增元件的預設樣式（分組容器透明、手機專用鈕隱藏） ---- */
   .cb-main, .cb-layers { display: contents; }
-  .cb-layers-btn, .info-btn, .dock-btn { display: none; }
+  .cb-layers-btn, .dock-btn { display: none; }
   .lang-btn {
     position: absolute; left: 16px; top: 52px;
     background: rgba(8, 12, 26, 0.82); color: #a8b6d0; border: 1px solid #223050; border-radius: 6px;
     padding: 2px 10px; font-family: inherit; font-size: 12px; cursor: pointer;
   }
-  .lang-btn:hover { background: #24365e; color: #e8e2d0; }
+  .lang-btn:hover, .info-btn:hover { background: #24365e; color: #e8e2d0; }
+  /* 桌面：說明預設收起，點「ⓘ 說明」才在左側欄展開 */
+  .info-btn {
+    position: absolute; left: 72px; top: 52px;
+    background: rgba(8, 12, 26, 0.82); color: #a8b6d0; border: 1px solid #223050; border-radius: 6px;
+    padding: 2px 10px; font-family: inherit; font-size: 12px; cursor: pointer;
+  }
+  .notice { display: none; }
+  .notice.show { display: block; }
 
   /* ---- 手機版：全部限定在 MOBILE_QUERY 內，桌面寬度不套用 ---- */
   @media ${MOBILE_QUERY} {
@@ -132,12 +140,12 @@ export function injectStyles(): void {
     .app-title { font-size: 14px; left: 12px; top: 10px; }
     .lang-btn { left: auto; right: 12px; top: 10px; min-height: 36px; min-width: 52px; font-size: 14px; }
     .info-btn {
-      display: block; position: absolute; right: 12px; top: 52px; min-height: 36px; min-width: 52px;
+      display: block; position: absolute; left: auto; right: 12px; top: 52px; min-height: 36px; min-width: 52px;
       background: rgba(8, 12, 26, 0.82); color: #a8b6d0; border: 1px solid #223050; border-radius: 6px;
       font-family: inherit; font-size: 13px; padding: 0 10px;
     }
     .notice {
-      display: none; position: fixed; left: 12px; right: 12px; top: 96px; max-width: none;
+      display: none; position: fixed; left: 12px; right: 12px; top: 96px; width: auto; max-width: none;
       background: rgba(8, 12, 26, 0.97); border: 1px solid #223050; border-radius: 10px;
       padding: 10px 12px; font-size: 12px; color: #8a96b0; line-height: 1.7;
     }
