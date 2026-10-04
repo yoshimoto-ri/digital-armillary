@@ -1,5 +1,5 @@
 import { store } from '../state/store';
-import { dateFromAstronomicalYear, formatAstronomicalYear, toAstroTime } from '../astro/time';
+import { dateFromAstronomicalYear, toAstroTime } from '../astro/time';
 import { geoEclipticLon } from '../astro/ephemeris';
 import { formatLon, starEclipticLonJ2000, starEclipticLonOfDate } from '../astro/frames';
 import { mansionBoundaries, mansionOf } from '../astro/mansions';
@@ -10,6 +10,10 @@ import { ALL_PLANETS, HAS_RETROGRADE } from '../data/planets';
 import { COMETS } from '../data/comets';
 import type { MansionsFile } from '../data/types';
 import { DISTAR_FILE, distarOverrideOf } from '../data/distarSystems';
+import {
+  cometName, cometNote, distarStarName, distarSysLabel, fmtYear, groupName, mansionName,
+  planetName, t, zodiacName,
+} from '../i18n';
 
 /** 儒略日 → UTC 年月日字串 */
 function jdToDateString(jd: number): string {
@@ -27,68 +31,77 @@ export function createSidebar(root: HTMLElement, mansionsFile: MansionsFile): vo
     const { selection, time } = store.get();
     if (!selection) {
       el.classList.remove('open');
+      document.body.classList.remove('sidebar-open');
       return;
     }
     el.classList.add('open');
-    const t = toAstroTime(time);
-    const boundaries = mansionBoundaries(mansionsFile.mansions, t);
-    const rows: [string, string][] = [];
+    document.body.classList.add('sidebar-open');
+    const at = toAstroTime(time);
+    const boundaries = mansionBoundaries(mansionsFile.mansions, at);
+    const rows: [string, string, string?][] = [];
     let title = '';
     let extra = '';
 
     if (selection.type === 'planet') {
       const spec = ALL_PLANETS.find((p) => p.key === selection.key)!;
-      title = spec.nameZh;
+      title = planetName(spec);
       if (spec.key === 'earth') {
-        extra = '地心黃經以地球為原點定義，不適用於地球本身。';
+        extra = t('earthNA');
       } else {
-        const lon = geoEclipticLon(spec.body, t);
+        const lon = geoEclipticLon(spec.body, at);
         if (lon == null) {
-          extra = '目前時刻超出星曆引擎支援範圍。';
+          extra = t('outOfRange');
         } else {
-          rows.push(['地心黃經', formatLon(lon)]);
-          rows.push(['所在宿', `${mansionOf(lon, boundaries).name}宿`]);
+          rows.push([t('geoLon'), formatLon(lon)]);
+          rows.push([t('inMansion'), mansionName(mansionOf(lon, boundaries).name)]);
           const z = zodiacOf(lon);
-          rows.push(['所在宮', `${z.name} ${formatLon(z.degreeInSign)}`]);
+          rows.push([t('inSign'), `${zodiacName(z.index)} ${formatLon(z.degreeInSign)}`]);
           if (HAS_RETROGRADE.has(spec.key)) {
-            const m = motionState(spec.body, t);
-            rows.push(['運行狀態', m === 'retrograde' ? '逆行' : m === 'direct' ? '順行' : '—']);
+            const m = motionState(spec.body, at);
+            rows.push([
+              t('motion'),
+              m === 'retrograde' ? t('retrograde') : m === 'direct' ? t('direct') : '—',
+              m === 'retrograde' ? 'retro' : undefined,
+            ]);
           }
           if (spec.discoveryYear != null) {
-            rows.push(['發現年', `西元 ${spec.discoveryYear} 年`]);
+            rows.push([t('discoveryYear'), t('discoveryYearVal', { year: spec.discoveryYear })]);
           }
         }
       }
     } else if (selection.type === 'comet') {
       const spec = COMETS.find((c) => c.key === selection.key)!;
-      title = spec.nameZh;
-      rows.push(['編號', spec.designation]);
-      const lon = cometGeoEclipticLon(spec, t);
+      title = cometName(spec);
+      rows.push([t('cometId'), spec.designation]);
+      const lon = cometGeoEclipticLon(spec, at);
       if (lon != null) {
-        rows.push(['地心黃經', formatLon(lon)]);
-        rows.push(['所在宿', `${mansionOf(lon, boundaries).name}宿`]);
+        rows.push([t('geoLon'), formatLon(lon)]);
+        rows.push([t('inMansion'), mansionName(mansionOf(lon, boundaries).name)]);
         const z = zodiacOf(lon);
-        rows.push(['所在宮', `${z.name} ${formatLon(z.degreeInSign)}`]);
+        rows.push([t('inSign'), `${zodiacName(z.index)} ${formatLon(z.degreeInSign)}`]);
       }
-      const r = cometHelioDistance(spec, t);
-      rows.push(['日心距', `${r < 10 ? r.toFixed(2) : r.toFixed(1)} AU`]);
-      rows.push(['週期', spec.periodYears >= 1000 ? `約 ${Math.round(spec.periodYears / 100) * 100} 年` : `約 ${spec.periodYears} 年`]);
-      rows.push(['曆元近日點', jdToDateString(spec.tpJd)]);
-      extra = `${spec.note} 軌道為二體克卜勒推算（未含行星攝動），離曆元近日點越遠誤差越大。`;
+      const r = cometHelioDistance(spec, at);
+      rows.push([t('helioDist'), `${r < 10 ? r.toFixed(2) : r.toFixed(1)} AU`]);
+      rows.push([
+        t('period'),
+        t('periodAbout', { n: spec.periodYears >= 1000 ? Math.round(spec.periodYears / 100) * 100 : spec.periodYears }),
+      ]);
+      rows.push([t('perihelion'), jdToDateString(spec.tpJd)]);
+      extra = t('cometExtra', { note: cometNote(spec) });
     } else {
       const m = mansionsFile.mansions.find((x) => x.name === selection.key)!;
-      title = `${m.name}宿（${m.group}）`;
-      const lon = starEclipticLonOfDate(m.raJ2000, m.decJ2000, t);
-      rows.push(['距星', `${m.detStarName}（${m.westernName}）`]);
-      rows.push(['視星等', m.vmag.toFixed(2)]);
-      rows.push(['距星黃經', formatLon(lon)]);
-      rows.push(['距星所在宮', zodiacOf(lon).name]);
+      title = t('mansionTitle', { name: mansionName(m.name), group: groupName(m.group) });
+      const lon = starEclipticLonOfDate(m.raJ2000, m.decJ2000, at);
+      rows.push([t('distarStar'), distarStarName(m)]);
+      rows.push([t('magnitude'), m.vmag.toFixed(2)]);
+      rows.push([t('distarLon'), formatLon(lon)]);
+      rows.push([t('distarSign'), zodiacName(zodiacOf(lon).index)]);
       // 歲差對照（§7.6）：同一距星在對照時刻落在哪一宮
       const s = store.get();
       if (s.layers.precessionCompare) {
         const ct = toAstroTime(dateFromAstronomicalYear(s.compareYear));
         const clon = starEclipticLonOfDate(m.raJ2000, m.decJ2000, ct);
-        rows.push([`${formatAstronomicalYear(s.compareYear)}所在宮`, zodiacOf(clon).name]);
+        rows.push([t('signAt', { year: fmtYear(s.compareYear) }), zodiacName(zodiacOf(clon).index)]);
       }
       // 歷代距星對照（§7.9）：此宿距星在漢／明系統與清基準不同者逐列顯示
       const DU = 360 / 365.25;
@@ -100,10 +113,14 @@ export function createSidebar(root: HTMLElement, mansionsFile: MansionsFile): vo
         let d = (starEclipticLonJ2000(o.raJ2000, o.decJ2000) - baseLon) / DU;
         if (d > 180 / DU) d -= 360 / DU;
         if (d < -180 / DU) d += 360 / DU;
-        const uncertain = sys.uncertain?.includes(m.name) ? '（考證存疑）' : '';
+        const uncertain = sys.uncertain?.includes(m.name) ? t('uncertainLong') : '';
         rows.push([
-          `${sys.label}距星`,
-          `${o.detStarName}（${o.westernName}）${uncertain}，差 ${d >= 0 ? '+' : ''}${d.toFixed(1)} 古度`,
+          t('histDistar', { sys: distarSysLabel(sys) }),
+          t('histDistarVal', {
+            star: distarStarName(o),
+            uncertain,
+            d: `${d >= 0 ? '+' : ''}${d.toFixed(1)}`,
+          }),
         ]);
       }
     }
@@ -111,12 +128,12 @@ export function createSidebar(root: HTMLElement, mansionsFile: MansionsFile): vo
     el.innerHTML = '';
     const closeBtn = document.createElement('button');
     closeBtn.className = 'close';
-    closeBtn.textContent = '✕';
+    closeBtn.textContent = t('closeBtn');
     closeBtn.addEventListener('click', () => store.set({ selection: null }));
     const h2 = document.createElement('h2');
     h2.textContent = title;
     el.append(closeBtn, h2);
-    for (const [k, v] of rows) {
+    for (const [k, v, cls] of rows) {
       const row = document.createElement('div');
       row.className = 'row';
       const kEl = document.createElement('span');
@@ -124,7 +141,7 @@ export function createSidebar(root: HTMLElement, mansionsFile: MansionsFile): vo
       kEl.textContent = k;
       const vEl = document.createElement('span');
       vEl.textContent = v;
-      if (k === '運行狀態' && v === '逆行') vEl.className = 'retro';
+      if (cls) vEl.className = cls;
       row.append(kEl, vEl);
       el.appendChild(row);
     }
@@ -140,15 +157,13 @@ export function createSidebar(root: HTMLElement, mansionsFile: MansionsFile): vo
       const hasHistory = DISTAR_FILE.systems.some(
         (sys) => sys.id !== 'qing' && distarOverrideOf(sys, selection.key) != null,
       );
-      p.textContent = hasHistory
-        ? '距星依清《儀象考成》系統；經《漢書·律曆志》距度驗證，清距星與漢代實測相合，「宿一」為明末距星之編號化石。'
-        : '距星依清《儀象考成》系統（經《漢書·律曆志》距度驗證，與漢代距星相同）；黃經為當日黃道座標。';
+      p.textContent = t(hasHistory ? 'distarNoteHist' : 'distarNotePlain');
       el.appendChild(p);
     }
   };
 
   store.subscribe((_s, changed) => {
-    if (changed.has('selection') || changed.has('time') || changed.has('compareYear') || changed.has('layers')) render();
+    if (changed.has('selection') || changed.has('lang') || changed.has('time') || changed.has('compareYear') || changed.has('layers')) render();
   });
   render();
 }

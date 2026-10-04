@@ -2,6 +2,8 @@ import { store } from '../state/store';
 import { clampDate } from '../astro/time';
 import { DISTAR_FILE } from '../data/distarSystems';
 import type { DistarSystemId } from '../data/types';
+import { bindAttr, bindText, distarSysLabel, onLang, t } from '../i18n';
+import type { DictKey } from '../i18n/zh';
 
 /** 底部控制列：視角切換 + 日期選擇 + 圖層開關。改狀態 → scene 訂閱重繪。 */
 export function createControlBar(root: HTMLElement): void {
@@ -12,9 +14,9 @@ export function createControlBar(root: HTMLElement): void {
   const modeWrap = document.createElement('div');
   modeWrap.className = 'mode-switch';
   const helioBtn = document.createElement('button');
-  helioBtn.textContent = '日心視角';
+  bindText(helioBtn, 'helio');
   const geoBtn = document.createElement('button');
-  geoBtn.textContent = '渾象視角';
+  bindText(geoBtn, 'geo');
   const syncModeButtons = () => {
     const mode = store.get().viewMode;
     helioBtn.classList.toggle('active', mode === 'helio');
@@ -44,28 +46,30 @@ export function createControlBar(root: HTMLElement): void {
   });
 
   const nowBtn = document.createElement('button');
-  nowBtn.textContent = '現在';
+  bindText(nowBtn, 'now');
   nowBtn.addEventListener('click', () => store.set({ time: new Date(), playing: false }));
 
   // --- 圖層開關 ---
-  const makeToggle = (labelText: string, checked: boolean, onChange: (v: boolean) => void) => {
+  const makeToggle = (key: DictKey, checked: boolean, onChange: (v: boolean) => void) => {
     const label = document.createElement('label');
     const cb = document.createElement('input');
     cb.type = 'checkbox';
     cb.checked = checked;
     cb.addEventListener('change', () => onChange(cb.checked));
-    label.append(cb, document.createTextNode(labelText));
+    const text = document.createElement('span');
+    bindText(text, key);
+    label.append(cb, text);
     return { label, cb };
   };
 
   const layers = store.get().layers;
-  const orbitsT = makeToggle('軌道線', layers.orbits, (v) => store.setLayer({ orbits: v }));
-  const linesT = makeToggle('宿連線', layers.mansionLines, (v) => store.setLayer({ mansionLines: v }));
-  const namesT = makeToggle('宿名', layers.mansionLabels, (v) => store.setLayer({ mansionLabels: v }));
-  const eclT = makeToggle('黃道', layers.eclipticLine, (v) => store.setLayer({ eclipticLine: v }));
-  const eqT = makeToggle('天赤道', layers.equatorLine, (v) => store.setLayer({ equatorLine: v }));
-  const zodT = makeToggle('十二宮', layers.zodiacBands, (v) => store.setLayer({ zodiacBands: v }));
-  const cometT = makeToggle('彗星', layers.comets, (v) => store.setLayer({ comets: v }));
+  const orbitsT = makeToggle('orbits', layers.orbits, (v) => store.setLayer({ orbits: v }));
+  const linesT = makeToggle('mansionLines', layers.mansionLines, (v) => store.setLayer({ mansionLines: v }));
+  const namesT = makeToggle('mansionNames', layers.mansionLabels, (v) => store.setLayer({ mansionLabels: v }));
+  const eclT = makeToggle('ecliptic', layers.eclipticLine, (v) => store.setLayer({ eclipticLine: v }));
+  const eqT = makeToggle('equator', layers.equatorLine, (v) => store.setLayer({ equatorLine: v }));
+  const zodT = makeToggle('zodiac', layers.zodiacBands, (v) => store.setLayer({ zodiacBands: v }));
+  const cometT = makeToggle('comets', layers.comets, (v) => store.setLayer({ comets: v }));
 
   // 歲差對照：開關 + 對照年輸入（負數 = 西元前，如 -100 = 西元前 100 年）
   const compareInput = document.createElement('input');
@@ -73,7 +77,7 @@ export function createControlBar(root: HTMLElement): void {
   compareInput.min = '-1000';
   compareInput.max = '5000';
   compareInput.step = '100';
-  compareInput.title = '對照年（負數 = 西元前）';
+  bindAttr(compareInput, 'title', 'precessionTitle');
   // 顯示慣例：西元前 N 年 = -N；天文年 = 1 - N（西元前 100 年 → 天文年 -99）
   const astroToDisplay = (y: number) => (y > 0 ? y : y - 1);
   const displayToAstro = (v: number) => (v > 0 ? v : v + 1);
@@ -86,18 +90,20 @@ export function createControlBar(root: HTMLElement): void {
     compareInput.value = String(clamped);
     store.set({ compareYear: displayToAstro(clamped) });
   });
-  const compareT = makeToggle('歲差對照', layers.precessionCompare, (v) => {
+  const compareT = makeToggle('precession', layers.precessionCompare, (v) => {
     compareInput.disabled = !v;
     store.setLayer({ precessionCompare: v });
   });
   // 宿界對照：開關 + 對照距星系統下拉（基準恆為清《儀象考成》）
   const distarSelect = document.createElement('select');
-  distarSelect.title = '對照距星系統（基準＝清《儀象考成》，青色宿界）';
+  bindAttr(distarSelect, 'title', 'distarSelectTitle');
   for (const sys of DISTAR_FILE.systems) {
     if (sys.id === 'qing') continue;
     const opt = document.createElement('option');
     opt.value = sys.id;
-    opt.textContent = sys.label;
+    onLang(() => {
+      opt.textContent = distarSysLabel(sys);
+    });
     distarSelect.appendChild(opt);
   }
   distarSelect.value = store.get().distarCompareSystem;
@@ -105,25 +111,42 @@ export function createControlBar(root: HTMLElement): void {
   distarSelect.addEventListener('change', () => {
     store.set({ distarCompareSystem: distarSelect.value as Exclude<DistarSystemId, 'qing'> });
   });
-  const distarT = makeToggle('宿界對照', layers.distarCompare, (v) => {
+  const distarT = makeToggle('distar', layers.distarCompare, (v) => {
     distarSelect.disabled = !v;
     store.setLayer({ distarCompare: v });
   });
-  distarT.label.title = '同屏顯示清《儀象考成》宿界（青）與對照系統距星差異（橙）；宿界綁定恆星，不隨歲差漂移';
+  bindAttr(distarT.label, 'title', 'distarTitle');
 
   // 三王星開關綁定「目前視角」的旗標，切換視角時回讀該視角記住的狀態
-  const modernT = makeToggle('現代三王星', layers.modernPlanetsHelio, (v) => {
+  const modernT = makeToggle('modern', layers.modernPlanetsHelio, (v) => {
     if (store.get().viewMode === 'helio') store.setLayer({ modernPlanetsHelio: v });
     else store.setLayer({ modernPlanetsGeo: v });
   });
 
-  bar.append(
-    modeWrap, dateInput, nowBtn,
+  // 分組容器：桌面 display: contents（排版與未分組時完全相同）；手機收合成「圖層」面板
+  const mainGroup = document.createElement('div');
+  mainGroup.className = 'cb-main';
+  mainGroup.append(modeWrap, dateInput, nowBtn);
+  const layerGroup = document.createElement('div');
+  layerGroup.className = 'cb-layers';
+  layerGroup.append(
     orbitsT.label, linesT.label, namesT.label,
     eclT.label, eqT.label, zodT.label, cometT.label, modernT.label,
     compareT.label, compareInput,
     distarT.label, distarSelect,
   );
+  // 手機專用：圖層面板開關鈕（桌面 CSS 隱藏）、語言切換鈕
+  const layersBtn = document.createElement('button');
+  layersBtn.className = 'cb-layers-btn';
+  const syncLayersBtn = () => {
+    layersBtn.textContent = t(bar.classList.contains('expanded') ? 'layersBtnClose' : 'layersBtn');
+  };
+  layersBtn.addEventListener('click', () => {
+    bar.classList.toggle('expanded');
+    syncLayersBtn();
+  });
+  onLang(syncLayersBtn);
+  bar.append(mainGroup, layersBtn, layerGroup);
   root.appendChild(bar);
 
   store.subscribe((s, changed) => {

@@ -4,7 +4,9 @@ import type { Engine } from '../engine';
 export function applyHelioMode(engine: Engine): void {
   const { camera, controls } = engine;
   camera.fov = 45;
-  camera.position.set(0, 420, 860);
+  // 直向窄螢幕（手機）水平視野窄，相機拉遠讓太陽系完整入鏡；橫向／桌面維持原值
+  const k = camera.aspect < 0.8 ? 1.7 : 1;
+  camera.position.set(0, 420 * k, 860 * k);
   camera.updateProjectionMatrix();
   controls.target.set(0, 0, 0);
   controls.minDistance = 30;

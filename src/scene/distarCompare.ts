@@ -3,6 +3,7 @@ import type { DistarSystem, Mansion } from '../data/types';
 import { eclJ2000ToEqj, starEclipticLonJ2000 } from '../astro/frames';
 import { directionToSphere, R_OVERLAY } from './scale';
 import { makeLabel } from './labels';
+import { distarSysShort, mansionName, t } from '../i18n';
 
 /** 基準（清）宿界刻線：J2000 黃緯 ±10° 短弧 */
 const BASE_LAT_RANGE = 10;
@@ -64,7 +65,7 @@ export class DistarCompare {
       CMP_LAT_RANGE,
     );
     const tmp = new THREE.Vector3();
-    const sysShort = sys.label.charAt(0); // 「漢」「明」
+    const sysShort = distarSysShort(sys); // 「漢」「明」／Han／Ming
     for (const o of diffs) {
       const base = baseMansions.find((m) => m.name === o.mansionName)!;
       const lon = starEclipticLonJ2000(o.raJ2000, o.decJ2000);
@@ -73,13 +74,23 @@ export class DistarCompare {
       if (d > 180 / DU) d -= 360 / DU;
       if (d < -180 / DU) d += 360 / DU;
       const uncertain = sys.uncertain?.includes(o.mansionName) ?? false;
-      const text = `${o.mansionName}宿·${sysShort}距星${uncertain ? '（存疑）' : ''} ${d >= 0 ? '+' : ''}${d.toFixed(1)}古度`;
+      const text = t('distarLabel', {
+        mansion: mansionName(o.mansionName),
+        sys: sysShort,
+        uncertain: uncertain ? t('uncertainShort') : '',
+        d: `${d >= 0 ? '+' : ''}${d.toFixed(1)}`,
+      });
       const label = makeLabel(text, { className: 'label-distar-compare' });
       directionToSphere(eclJ2000ToEqj(lon, CMP_LAT_RANGE + 2.5), R_OVERLAY, tmp);
       label.position.copy(tmp);
       this.cmpLabels.push(label);
       this.group.add(label);
     }
+  }
+
+  /** 語言切換：強制下次 build 重建標籤文字 */
+  invalidate(): void {
+    this.builtSystemId = null;
   }
 
   setVisible(v: boolean): void {

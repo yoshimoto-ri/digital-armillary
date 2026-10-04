@@ -326,6 +326,15 @@ astronomy-engine 不含彗星星曆，依規格以軌道根數作**二體克卜�
 - 側欄：點選奎／觜／參等有歷代差異之宿，逐列顯示各系統距星與差距古度，
   並附《漢書·律曆志》驗證結論一行。
 
+### 7.10 雙語介面與手機版
+- **i18n**：`src/i18n/index.ts` 提供 `t(key, params)`、`onLang(fn)`（立即執行並於切換時重跑）、
+  `bindText/bindAttr`；字串表 `zh.ts` 為鍵名來源，`en.ts` 以 `Record<DictKey,string>` 強制鍵齊全。
+  語言為 `store.lang`；`main.ts` 訂閱 `lang` 後呼叫各場景類別的 `relabel()`（宿名、行星、彗星、宮名）
+  與 `distarCompare.invalidate()` 再 `refresh()`。靜態資料檔不動，英文名集中於 `i18n/names.ts`。
+  純 CSS 生成文字（尚未發現）以 CSS 變數 `--undiscovered` 帶入。
+- **手機版**：`ui/env.ts` 的 `MOBILE_QUERY` 為 CSS 與 JS 共用的唯一判斷；樣式全部在該媒體查詢內，
+  桌面規則僅新增「分組容器 `display: contents`」與「手機專用鈕 `display: none`」，排版與改版前逐像素一致。
+
 ### 7.6 歲差對照模式
 同屏繪製兩組十二宮分區環：一組依當前時刻春分點（紫色系，隨時間軸漂移）、
 一組依對照時刻（暖橙色系，預設西元前 100 年，可調，固定不動）。宮名上下錯開

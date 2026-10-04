@@ -28,6 +28,12 @@ computational precision.
 - **Precession comparison rings** — overlay the zodiac divisions of any two
   epochs (default: 100 BC vs. today) and see, per mansion, which sign its
   determinative star occupied in each era
+- **Bilingual UI (繁體中文 / English)** — one-tap language switch; mansion
+  names show pinyin + characters in English; remembers your choice and
+  follows the browser language on first visit
+- **Mobile-friendly layout** — on small screens the controls collapse into a
+  single "Layers" panel, selecting a body opens a bottom sheet, touch targets
+  are 40 px+, and tapping near a planet selects it. Desktop layout is untouched
 - **Three determinative-star systems (距星三系統)** — Han (Shi Shi), late-Ming
   (Chongzhen calendar reform) and Qing (Yixiang Kaocheng) mansion-boundary
   conventions, with an overlay comparing where each era drew the boundaries.
@@ -101,9 +107,6 @@ subdomain with zero server-side configuration).
 
 ## Roadmap
 
-- **Bilingual UI** — Traditional Chinese / English
-- **Mobile interaction refinements** — touch-friendly controls and a more
-  compact layout for small screens
 - **Stellar proper motion** — free the stars from J2000
 - **Ecliptic-locked geocentric mode** — keep the zodiac band level while
   panning

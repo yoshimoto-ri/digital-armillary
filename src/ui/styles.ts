@@ -1,4 +1,6 @@
 /** UI 全域樣式（一次注入；元件結構各自建立） */
+import { MOBILE_QUERY } from './env';
+
 export function injectStyles(): void {
   const css = `
   .label-mansion {
@@ -11,7 +13,7 @@ export function injectStyles(): void {
   }
   .label-planet-modern { color: #9fc8e8; }
   .label-undiscovered { opacity: 0.45; }
-  .label-undiscovered::after { content: '（尚未發現）'; font-size: 10px; }
+  .label-undiscovered::after { content: var(--undiscovered, '（尚未發現）'); font-size: 10px; }
   .label-zodiac {
     color: #a894d8; font-size: 12px; text-shadow: 0 0 4px #000;
     user-select: none; white-space: nowrap; opacity: 0.85;
@@ -113,9 +115,74 @@ export function injectStyles(): void {
   }
   .app-title small { display: block; font-size: 10px; color: #5a6680; letter-spacing: 1px; margin-top: 2px; }
 
-  @media (max-width: 640px) {
-    .sidebar { width: auto; left: 14px; right: 14px; top: auto; bottom: 130px; }
-    .control-bar { gap: 8px; font-size: 12px; padding: 6px 10px; }
+  /* ---- 桌面：新增元件的預設樣式（分組容器透明、手機專用鈕隱藏） ---- */
+  .cb-main, .cb-layers { display: contents; }
+  .cb-layers-btn, .info-btn { display: none; }
+  .lang-btn {
+    position: absolute; left: 16px; top: 52px;
+    background: rgba(8, 12, 26, 0.82); color: #a8b6d0; border: 1px solid #223050; border-radius: 6px;
+    padding: 2px 10px; font-family: inherit; font-size: 12px; cursor: pointer;
+  }
+  .lang-btn:hover { background: #24365e; color: #e8e2d0; }
+
+  /* ---- 手機版：全部限定在 MOBILE_QUERY 內，桌面寬度不套用 ---- */
+  @media ${MOBILE_QUERY} {
+    * { -webkit-tap-highlight-color: transparent; }
+    .app-title { font-size: 14px; left: 12px; top: 10px; }
+    .lang-btn { left: auto; right: 12px; top: 10px; min-height: 36px; min-width: 52px; font-size: 14px; }
+    .info-btn {
+      display: block; position: absolute; right: 12px; top: 52px; min-height: 36px; min-width: 52px;
+      background: rgba(8, 12, 26, 0.82); color: #a8b6d0; border: 1px solid #223050; border-radius: 6px;
+      font-family: inherit; font-size: 13px; padding: 0 10px;
+    }
+    .notice {
+      display: none; position: fixed; left: 12px; right: 12px; top: 96px; max-width: none;
+      background: rgba(8, 12, 26, 0.97); border: 1px solid #223050; border-radius: 10px;
+      padding: 10px 12px; font-size: 12px; color: #8a96b0; line-height: 1.7;
+    }
+    .notice.show { display: block; }
+
+    .bottom-stack { bottom: max(8px, env(safe-area-inset-bottom)); gap: 6px; padding: 0 8px; }
+    .control-bar, .timeline-bar, .sidebar { background: rgba(8, 12, 26, 0.95); }
+    body.sidebar-open .bottom-stack { display: none; }
+
+    .control-bar {
+      width: 100%; max-width: 100%; flex-direction: column; align-items: stretch;
+      gap: 6px; padding: 8px; font-size: 14px;
+    }
+    .cb-main { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+    .cb-layers-btn { display: block; width: 100%; min-height: 40px; }
+    .cb-layers { display: none; }
+    .control-bar.expanded .cb-layers {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2px 10px;
+      max-height: 38vh; overflow-y: auto; padding-top: 4px;
+    }
+    .control-bar label { min-height: 40px; gap: 8px; font-size: 14px; }
+    .control-bar input[type="checkbox"] { width: 20px; height: 20px; }
+    .control-bar input[type="number"], .control-bar select { min-height: 40px; font-size: 16px; }
+    .control-bar input[type="datetime-local"] { min-height: 40px; font-size: 16px; }
+    .control-bar button { min-height: 40px; font-size: 14px; }
+    .mode-switch button { padding: 0 14px; }
+
+    .timeline-bar { width: 100%; flex-wrap: wrap; gap: 6px 10px; padding: 6px 10px; }
+    .timeline-bar button.play { min-height: 40px; font-size: 14px; }
+    .timeline-bar select { min-height: 40px; font-size: 14px; }
+    .timeline-bar .year-readout { order: 2; margin-left: auto; min-width: 0; font-size: 13px; }
+    .timeline-bar input[type="range"] { order: 3; flex: 1 1 100%; min-width: 0; min-height: 28px; }
+
+    .sidebar {
+      position: fixed; left: 0; right: 0; bottom: 0; top: auto; width: auto;
+      max-height: 46vh; overflow-y: auto; border-radius: 14px 14px 0 0;
+      padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+    }
+    .sidebar h2 { font-size: 18px; padding-right: 36px; }
+    .sidebar .row { font-size: 14px; gap: 12px; padding: 5px 0; }
+    .sidebar .row span:last-child { text-align: right; }
+    .sidebar .src { font-size: 12px; }
+    .sidebar .close { top: 6px; right: 8px; font-size: 20px; padding: 8px 10px; }
+
+    .label-mansion { font-size: 12px; padding: 6px; }
+    .label-comet, .label-zodiac-compare, .label-equinox-compare, .label-distar-compare { font-size: 12px; }
   }
   `;
   const style = document.createElement('style');

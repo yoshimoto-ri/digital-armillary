@@ -12,7 +12,9 @@ import { DistarCompare } from './scene/distarCompare';
 import { distarSystemById } from './data/distarSystems';
 import { applyHelioMode } from './scene/modes/helioMode';
 import { applyGeoMode } from './scene/modes/geoMode';
+import { initLang } from './i18n';
 import { injectStyles } from './ui/styles';
+import { isMobileLayout } from './ui/env';
 import { createControlBar } from './ui/controlBar';
 import { createTimeline } from './ui/timeline';
 import { createSidebar } from './ui/sidebar';
@@ -28,7 +30,10 @@ const sceneRoot = document.getElementById('scene-root')!;
 const labelRoot = document.getElementById('label-root')!;
 const uiRoot = document.getElementById('ui-root')!;
 
+initLang();
 injectStyles();
+// 手機預設不顯示 28 宿名（太擠）；可由「圖層」面板開啟。桌面維持預設全開。
+if (isMobileLayout()) store.setLayer({ mansionLabels: false });
 const engine = new Engine(sceneRoot, labelRoot);
 
 // --- 場景物件 ---
@@ -91,11 +96,19 @@ function applyViewMode(): void {
 }
 
 store.subscribe((_s, changed) => {
+  if (changed.has('lang')) {
+    sphere.relabel();
+    planets.relabel();
+    comets.relabel();
+    overlays.relabel();
+    precession.relabel();
+    distarCompare.invalidate();
+  }
   if (changed.has('viewMode')) applyViewMode();
   if (
     changed.has('time') || changed.has('layers') || changed.has('viewMode') ||
     changed.has('compareYear') || changed.has('playing') || changed.has('playSpeed') ||
-    changed.has('distarCompareSystem')
+    changed.has('distarCompareSystem') || changed.has('lang')
   ) refresh();
 });
 applyViewMode();
@@ -130,6 +143,7 @@ if (import.meta.env.DEV) {
 }
 
 // --- 點選行星／彗星（raycast） ---
+const COARSE_POINTER = window.matchMedia('(pointer: coarse)').matches;
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 let downAt: [number, number] | null = null;
@@ -143,8 +157,22 @@ engine.renderer.domElement.addEventListener('pointerup', (e) => {
   raycaster.setFromCamera(pointer, engine.camera);
   const targets = [...planets.getMeshes(), ...comets.getMeshes()].filter((m) => m.visible);
   const hits = raycaster.intersectObjects(targets, false);
-  if (hits.length > 0) {
-    const ud = hits[0].object.userData;
+  let ud: Record<string, unknown> | null = hits.length > 0 ? hits[0].object.userData : null;
+  // 觸控：行星太小難點中，改取螢幕上 28px 內最近者（桌面滑鼠維持原射線判定）
+  if (!ud && COARSE_POINTER) {
+    let best = 28;
+    const v = new THREE.Vector3();
+    for (const m of targets) {
+      m.getWorldPosition(v).project(engine.camera);
+      if (v.z > 1) continue;
+      const d = Math.hypot(((v.x + 1) / 2) * window.innerWidth - e.clientX, ((1 - v.y) / 2) * window.innerHeight - e.clientY);
+      if (d < best) {
+        best = d;
+        ud = m.userData;
+      }
+    }
+  }
+  if (ud) {
     if (ud.planetKey) store.set({ selection: { type: 'planet', key: ud.planetKey as string } });
     else if (ud.cometKey) store.set({ selection: { type: 'comet', key: ud.cometKey as string } });
   }

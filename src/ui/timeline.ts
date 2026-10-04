@@ -1,13 +1,15 @@
 import { store } from '../state/store';
-import { clampDate, formatAstronomicalYear, MAX_DATE, MIN_DATE } from '../astro/time';
+import { clampDate, MAX_DATE, MIN_DATE } from '../astro/time';
+import { fmtYear, onLang, t } from '../i18n';
+import type { DictKey } from '../i18n/zh';
 
 /** 播放速率檔位（模擬日／真實秒）。100 年/秒供觀察歲差漂移。 */
-const SPEEDS: { label: string; daysPerSec: number }[] = [
-  { label: '1 天/秒', daysPerSec: 1 },
-  { label: '10 天/秒', daysPerSec: 10 },
-  { label: '1 年/秒', daysPerSec: 365.25 },
-  { label: '10 年/秒', daysPerSec: 3652.5 },
-  { label: '100 年/秒', daysPerSec: 36525 },
+const SPEEDS: { label: DictKey; daysPerSec: number }[] = [
+  { label: 'speed1', daysPerSec: 1 },
+  { label: 'speed2', daysPerSec: 10 },
+  { label: 'speed3', daysPerSec: 365.25 },
+  { label: 'speed4', daysPerSec: 3652.5 },
+  { label: 'speed5', daysPerSec: 36525 },
 ];
 
 const MIN_YEAR = MIN_DATE.getUTCFullYear();
@@ -21,16 +23,18 @@ export function createTimeline(root: HTMLElement): void {
   const playBtn = document.createElement('button');
   playBtn.className = 'play';
   const syncPlayBtn = () => {
-    playBtn.textContent = store.get().playing ? '⏸ 暫停' : '▶ 播放';
+    playBtn.textContent = t(store.get().playing ? 'pause' : 'play');
   };
-  syncPlayBtn();
+  onLang(syncPlayBtn);
   playBtn.addEventListener('click', () => store.set({ playing: !store.get().playing }));
 
   const speedSel = document.createElement('select');
   for (const s of SPEEDS) {
     const opt = document.createElement('option');
     opt.value = String(s.daysPerSec);
-    opt.textContent = s.label;
+    onLang(() => {
+      opt.textContent = t(s.label);
+    });
     speedSel.appendChild(opt);
   }
   speedSel.value = String(SPEEDS[2].daysPerSec); // 預設 1 年/秒
@@ -48,9 +52,9 @@ export function createTimeline(root: HTMLElement): void {
 
   const syncFromState = (d: Date) => {
     slider.value = String(d.getUTCFullYear());
-    readout.textContent = formatAstronomicalYear(d.getUTCFullYear());
+    readout.textContent = fmtYear(d.getUTCFullYear());
   };
-  syncFromState(store.get().time);
+  onLang(() => syncFromState(store.get().time));
 
   slider.addEventListener('input', () => {
     const cur = store.get().time;

@@ -4,6 +4,9 @@ import type { DistarSystemId } from '../data/types';
 
 export type ViewMode = 'helio' | 'geo';
 
+/** 介面語言（i18n/index.ts 管理偵測與持久化） */
+export type Lang = 'zh' | 'en';
+
 export interface SelectedBody {
   type: 'planet' | 'mansion' | 'comet';
   /** planet: PlanetSpec.key；mansion: 宿名；comet: CometSpec.key */
@@ -32,6 +35,7 @@ export interface LayerState {
 }
 
 export interface AppState {
+  lang: Lang;
   time: Date;
   viewMode: ViewMode;
   /** 時間軸播放中 */
@@ -50,6 +54,7 @@ export type StateKey = keyof AppState;
 type Listener = (state: AppState, changed: Set<StateKey>) => void;
 
 const state: AppState = {
+  lang: 'zh',
   time: new Date(),
   viewMode: 'helio',
   playing: false,

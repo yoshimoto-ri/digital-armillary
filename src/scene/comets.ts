@@ -5,6 +5,7 @@ import { COMETS, CometSpec } from '../data/comets';
 import { cometGeoVec, cometHelioVec, sampleCometOrbit } from '../astro/comets';
 import { compressToScene, directionToSphere, R_GEO_BODIES } from './scale';
 import { makeLabel } from './labels';
+import { cometName } from '../i18n';
 
 const ORBIT_SAMPLES = 512;
 /** 渾象視角彗星標記半徑（場景單位） */
@@ -35,7 +36,7 @@ export class Comets {
         new THREE.MeshBasicMaterial({ color: spec.color }),
       );
       mesh.userData.cometKey = spec.key;
-      const label = makeLabel(spec.nameZh, {
+      const label = makeLabel(cometName(spec), {
         className: 'label-comet',
         onClick: () => onSelect(spec.key),
       });
@@ -103,6 +104,11 @@ export class Comets {
       node.orbit.visible = show && mode === 'helio';
       node.mesh.scale.setScalar(mode === 'geo' ? GEO_RADIUS / 1.6 : 1);
     }
+  }
+
+  /** 語言切換：重寫彗星名稱 */
+  relabel(): void {
+    for (const node of this.nodes.values()) node.label.element.textContent = cometName(node.spec);
   }
 
   getMeshes(): THREE.Mesh[] {

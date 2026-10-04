@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { AstroTime } from 'astronomy-engine';
 import type { LayerState } from '../state/store';
 import { eclipticOfDateToEqj, equatorOfDateToEqj } from '../astro/frames';
-import { ZODIAC_NAMES } from '../data/zodiacNames';
+import { t, zodiacName } from '../i18n';
 import { directionToSphere, R_OVERLAY } from './scale';
 import { makeLabel } from './labels';
 
@@ -48,12 +48,12 @@ export class Overlays {
       new THREE.LineBasicMaterial({ color: 0x8a7ab8, transparent: true, opacity: 0.5 }),
     );
     this.zodiacGroup.add(this.zodiacTicks);
-    for (const name of ZODIAC_NAMES) {
-      const label = makeLabel(name, { className: 'label-zodiac' });
+    for (let k = 0; k < 12; k++) {
+      const label = makeLabel(zodiacName(k), { className: 'label-zodiac' });
       this.zodiacLabels.push(label);
       this.zodiacGroup.add(label);
     }
-    this.equinoxLabel = makeLabel('春分點 ♈', { className: 'label-equinox' });
+    this.equinoxLabel = makeLabel(t('equinox'), { className: 'label-equinox' });
     this.zodiacGroup.add(this.equinoxLabel);
 
     this.group.add(this.eclipticLine, this.equatorLine, this.zodiacGroup);
@@ -108,6 +108,14 @@ export class Overlays {
     // 春分點：λ=0 黃緯 −12°（與宮名錯開）
     directionToSphere(eclipticOfDateToEqj(0, -12, time), R_OVERLAY, tmp);
     this.equinoxLabel.position.copy(tmp);
+  }
+
+  /** 語言切換：重寫宮名與春分點標籤 */
+  relabel(): void {
+    this.zodiacLabels.forEach((l, k) => {
+      l.element.textContent = zodiacName(k);
+    });
+    this.equinoxLabel.element.textContent = t('equinox');
   }
 
   applyVisibility(layers: LayerState): void {

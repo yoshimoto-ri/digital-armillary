@@ -1,8 +1,7 @@
 import * as THREE from 'three';
 import { AstroTime } from 'astronomy-engine';
 import { eclipticOfDateToEqj } from '../astro/frames';
-import { formatAstronomicalYear } from '../astro/time';
-import { ZODIAC_NAMES } from '../data/zodiacNames';
+import { fmtYear, t, zodiacName } from '../i18n';
 import { directionToSphere, R_OVERLAY } from './scale';
 import { makeLabel } from './labels';
 
@@ -36,8 +35,8 @@ export class PrecessionCompare {
     );
     this.group.add(this.ticks);
 
-    for (const name of ZODIAC_NAMES) {
-      const label = makeLabel(name, { className: 'label-zodiac-compare' });
+    for (let k = 0; k < 12; k++) {
+      const label = makeLabel(zodiacName(k), { className: 'label-zodiac-compare' });
       this.zodiacLabels.push(label);
       this.group.add(label);
     }
@@ -72,9 +71,17 @@ export class PrecessionCompare {
       directionToSphere(eclipticOfDateToEqj(k * 30 + 15, -16, compareTime), R_OVERLAY, tmp);
       this.zodiacLabels[k].position.copy(tmp);
     }
-    this.equinoxLabel.element.textContent = `春分點（${formatAstronomicalYear(compareYear)}）`;
+    this.equinoxLabel.element.textContent = t('equinoxAt', { year: fmtYear(compareYear) });
     directionToSphere(eclipticOfDateToEqj(0, -22, compareTime), R_OVERLAY, tmp);
     this.equinoxLabel.position.copy(tmp);
+  }
+
+  /** 語言切換：重寫宮名並讓下次 update 重寫春分點標籤 */
+  relabel(): void {
+    this.zodiacLabels.forEach((l, k) => {
+      l.element.textContent = zodiacName(k);
+    });
+    this.lastYear = null;
   }
 
   setVisible(v: boolean): void {

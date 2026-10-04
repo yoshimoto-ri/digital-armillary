@@ -6,6 +6,7 @@ import { geoVec, helioVec } from '../astro/ephemeris';
 import { motionState } from '../astro/retrograde';
 import { compressToScene, directionToSphere, eqjToScene, R_GEO_BODIES } from './scale';
 import { makeLabel } from './labels';
+import { planetLabelText, t } from '../i18n';
 
 /** 月球在日心視角中的固定示意偏移量（場景單位）——方向真實、距離示意 */
 const MOON_OFFSET_UNITS = 9;
@@ -52,8 +53,7 @@ export class Planets {
         new THREE.MeshBasicMaterial({ color: spec.color, transparent: true }),
       );
       mesh.userData.planetKey = spec.key;
-      const labelText =
-        spec.discoveryYear != null ? `${spec.nameZh}（${spec.discoveryYear} 年發現）` : spec.nameZh;
+      const labelText = planetLabelText(spec);
       const label = makeLabel(labelText, {
         className: spec.group === 'modern' ? 'label-planet label-planet-modern' : 'label-planet',
         onClick: () => onSelect(spec.key),
@@ -170,8 +170,16 @@ export class Planets {
       const retro =
         inGeo && node.available && mesh.visible && motionState(spec.body, time) === 'retrograde';
       if (glow) glow.visible = retro && showGlow;
-      const text = retro ? `${node.baseLabelText}·逆` : node.baseLabelText;
+      const text = retro ? `${node.baseLabelText}${t('retroSuffix')}` : node.baseLabelText;
       if (label.element.textContent !== text) label.element.textContent = text;
+    }
+  }
+
+  /** 語言切換：重算標籤文字（逆行後綴由 applyRetrograde 於下一次 refresh 補上） */
+  relabel(): void {
+    for (const node of this.nodes.values()) {
+      node.baseLabelText = planetLabelText(node.spec);
+      node.label.element.textContent = node.baseLabelText;
     }
   }
 

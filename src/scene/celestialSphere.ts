@@ -3,6 +3,7 @@ import type { MansionsFile, MansionStarsFile } from '../data/types';
 import { raDecToEqjUnit } from '../astro/frames';
 import { directionToSphere, R_SPHERE } from './scale';
 import { makeLabel } from './labels';
+import { mansionName } from '../i18n';
 
 /**
  * 天球：二十八宿恆星（單一 Points，一次 draw call）、宿連線（單一 LineSegments）、
@@ -12,6 +13,7 @@ export class CelestialSphere {
   readonly group = new THREE.Group();
   private readonly lines: THREE.LineSegments;
   private readonly labels: THREE.Group;
+  private readonly mansionNames: string[];
 
   constructor(
     mansionsFile: MansionsFile,
@@ -62,8 +64,9 @@ export class CelestialSphere {
 
     // --- 宿名標籤：置於距星方向、天球面稍外側 ---
     this.labels = new THREE.Group();
+    this.mansionNames = mansionsFile.mansions.map((m) => m.name);
     for (const m of mansionsFile.mansions) {
-      const label = makeLabel(`${m.name}宿`, {
+      const label = makeLabel(mansionName(m.name), {
         className: 'label-mansion',
         onClick: () => onSelectMansion(m.name),
       });
@@ -73,6 +76,13 @@ export class CelestialSphere {
       this.labels.add(label);
     }
     this.group.add(this.labels);
+  }
+
+  /** 語言切換：重寫宿名標籤文字 */
+  relabel(): void {
+    this.labels.children.forEach((child, i) => {
+      (child as unknown as { element: HTMLElement }).element.textContent = mansionName(this.mansionNames[i]);
+    });
   }
 
   setLinesVisible(v: boolean): void {
