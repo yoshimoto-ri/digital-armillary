@@ -104,10 +104,11 @@ export function injectStyles(): void {
   .sidebar .close:hover { color: #e8e2d0; }
   .sidebar .src { margin-top: 8px; font-size: 11px; color: #5a6680; line-height: 1.5; }
 
+  /* 桌面：說明文字置於左側欄（語言鈕下方），固定寬度自動換行，中英文都不會壓到底部控制區 */
   .notice {
-    position: absolute; left: 14px; bottom: 14px; font-size: 11px; color: #5a6680;
+    position: absolute; left: 16px; top: 92px; width: 250px; font-size: 11px; color: #6a7690;
     line-height: 1.6; pointer-events: none; text-shadow: 0 0 3px #000;
-    max-width: 340px;
+    background: rgba(4, 6, 15, 0.6); border-radius: 8px; padding: 8px 10px;
   }
   .app-title {
     position: absolute; left: 16px; top: 12px; color: #a8b6d0; font-size: 15px;
@@ -117,7 +118,7 @@ export function injectStyles(): void {
 
   /* ---- 桌面：新增元件的預設樣式（分組容器透明、手機專用鈕隱藏） ---- */
   .cb-main, .cb-layers { display: contents; }
-  .cb-layers-btn, .info-btn { display: none; }
+  .cb-layers-btn, .info-btn, .dock-btn { display: none; }
   .lang-btn {
     position: absolute; left: 16px; top: 52px;
     background: rgba(8, 12, 26, 0.82); color: #a8b6d0; border: 1px solid #223050; border-radius: 6px;
@@ -145,18 +146,29 @@ export function injectStyles(): void {
     .bottom-stack { bottom: max(8px, env(safe-area-inset-bottom)); gap: 6px; padding: 0 8px; }
     .control-bar, .timeline-bar, .sidebar { background: rgba(8, 12, 26, 0.95); }
     body.sidebar-open .bottom-stack { display: none; }
+    .dock-btn {
+      display: block; align-self: flex-end; min-height: 34px; padding: 0 12px;
+      background: rgba(8, 12, 26, 0.95); color: #a8b6d0; border: 1px solid #223050; border-radius: 8px;
+      font-family: inherit; font-size: 13px;
+    }
+    .bottom-stack.collapsed > :not(.dock-btn) { display: none; }
 
     .control-bar {
       width: 100%; max-width: 100%; flex-direction: column; align-items: stretch;
       gap: 6px; padding: 8px; font-size: 14px;
     }
     .cb-main { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
-    .cb-layers-btn { display: block; width: 100%; min-height: 40px; }
+    .cb-layers-btn { display: block; flex: 1 1 auto; min-height: 40px; }
+    /* 收合時只留「視角切換｜現在｜圖層」一列；日期輸入與各圖層開關展開才出現 */
+    .cb-main input[type="datetime-local"] { display: none; }
+    .control-bar.expanded .cb-main input[type="datetime-local"] { display: block; order: 5; flex: 1 1 100%; }
     .cb-layers { display: none; }
     .control-bar.expanded .cb-layers {
       display: grid; grid-template-columns: 1fr 1fr; gap: 2px 10px;
-      max-height: 38vh; overflow-y: auto; padding-top: 4px;
+      max-height: 34vh; overflow-y: auto; padding-top: 4px;
     }
+    /* 未啟用的對照附屬欄位（年份／系統下拉）先收起，勾選對應開關後才出現 */
+    .cb-layers input[type="number"]:disabled, .cb-layers select:disabled { display: none; }
     .control-bar label { min-height: 40px; gap: 8px; font-size: 14px; }
     .control-bar input[type="checkbox"] { width: 20px; height: 20px; }
     .control-bar input[type="number"], .control-bar select { min-height: 40px; font-size: 16px; }
@@ -183,6 +195,37 @@ export function injectStyles(): void {
 
     .label-mansion { font-size: 12px; padding: 6px; }
     .label-comet, .label-zodiac-compare, .label-equinox-compare, .label-distar-compare { font-size: 12px; }
+  }
+
+  /* ---- 手機橫持（矮螢幕）：全部壓成單列，圖層面板與側欄改為右側浮動面板 ---- */
+  @media (max-height: 500px) and (pointer: coarse), (max-height: 500px) and (max-width: 720px) {
+    .app-title { font-size: 13px; top: 6px; left: 10px; }
+    .app-title small { display: none; }
+    .lang-btn { top: 6px; right: 8px; min-height: 32px; min-width: 48px; font-size: 13px; }
+    .info-btn { top: 6px; right: 64px; min-height: 32px; min-width: 52px; font-size: 12px; }
+    .notice { top: 46px; }
+    .bottom-stack { bottom: max(4px, env(safe-area-inset-bottom)); gap: 4px; }
+    body.sidebar-open .bottom-stack { display: flex; right: 336px; }
+    .dock-btn { min-height: 30px; font-size: 12px; }
+    .control-bar { padding: 4px 8px; gap: 4px; }
+    .cb-main { flex-wrap: nowrap; gap: 6px; }
+    .cb-main input[type="datetime-local"] { display: block; flex: 0 1 220px; min-height: 34px; font-size: 14px; }
+    .control-bar.expanded .cb-main input[type="datetime-local"] { order: 0; flex: 0 1 220px; }
+    .control-bar button, .mode-switch button, .cb-layers-btn { min-height: 34px; font-size: 13px; }
+    .cb-layers-btn { flex: 0 0 auto; padding: 0 14px; }
+    .control-bar.expanded .cb-layers {
+      position: fixed; right: 8px; bottom: 96px; width: 340px; max-height: calc(100vh - 110px);
+      background: rgba(8, 12, 26, 0.97); border: 1px solid #223050; border-radius: 10px; padding: 8px 12px;
+    }
+    .control-bar label { min-height: 34px; font-size: 13px; }
+    .timeline-bar { flex-wrap: nowrap; padding: 3px 10px; }
+    .timeline-bar button.play, .timeline-bar select { min-height: 34px; font-size: 13px; }
+    .timeline-bar input[type="range"] { order: 0; flex: 1 1 auto; min-height: 24px; }
+    .timeline-bar .year-readout { order: 0; margin-left: 0; font-size: 12px; min-width: 6.5em; }
+    .sidebar {
+      left: auto; right: 8px; top: 8px; bottom: 8px; width: 320px; max-height: none;
+      border-radius: 12px; padding: 12px 14px;
+    }
   }
   `;
   const style = document.createElement('style');

@@ -14,6 +14,8 @@ export const zh = {
   // 控制列
   layersBtn: '⚙ 圖層',
   layersBtnClose: '✕ 收合',
+  dockHide: '▾ 隱藏控制列',
+  dockShow: '▴ 控制列',
   helio: '日心視角',
   geo: '渾象視角',
   now: '現在',

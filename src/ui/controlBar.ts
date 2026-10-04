@@ -146,7 +146,21 @@ export function createControlBar(root: HTMLElement): void {
     syncLayersBtn();
   });
   onLang(syncLayersBtn);
-  bar.append(mainGroup, layersBtn, layerGroup);
+  mainGroup.append(layersBtn); // 桌面隱藏；手機與模式切換同列
+  bar.append(mainGroup, layerGroup);
+
+  // 手機專用：整個底部控制區（控制列＋時間軸）可隱藏，讓出整個星空（桌面 CSS 隱藏此鈕）
+  const dockBtn = document.createElement('button');
+  dockBtn.className = 'dock-btn';
+  const syncDockBtn = () => {
+    dockBtn.textContent = t(root.classList.contains('collapsed') ? 'dockShow' : 'dockHide');
+  };
+  dockBtn.addEventListener('click', () => {
+    root.classList.toggle('collapsed');
+    syncDockBtn();
+  });
+  onLang(syncDockBtn);
+  root.prepend(dockBtn);
   root.appendChild(bar);
 
   store.subscribe((s, changed) => {

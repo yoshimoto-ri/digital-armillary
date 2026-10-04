@@ -14,6 +14,8 @@ export const en: Record<DictKey, string> = {
 
   layersBtn: '⚙ Layers',
   layersBtnClose: '✕ Close',
+  dockHide: '▾ Hide controls',
+  dockShow: '▴ Controls',
   helio: 'Heliocentric',
   geo: 'Armillary',
   now: 'Now',

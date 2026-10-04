@@ -52,12 +52,13 @@ engine.scene.add(
 );
 
 // --- UI ---
-// 底部直向堆疊：時間軸列在上、控制列在下，高度自適應不互相遮擋
+// 底部直向堆疊：控制列在上、時間軸列在下，高度自適應不互相遮擋
 const bottomStack = document.createElement('div');
 bottomStack.className = 'bottom-stack';
 uiRoot.appendChild(bottomStack);
-createTimeline(bottomStack);
+// 控制列在上、時間軸在最底（圖層面板向上展開時不推擠時間軸）
 createControlBar(bottomStack);
+createTimeline(bottomStack);
 createSidebar(uiRoot, mansionsFile);
 createNotice(uiRoot);
 

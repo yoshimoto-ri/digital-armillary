@@ -16,7 +16,8 @@
       #app { position: fixed; inset: 0; }
       #scene-root { position: absolute; inset: 0; }
       #scene-root canvas { display: block; }
-      #label-root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+      /* z-index: 0 讓標籤自成堆疊層——CSS2DRenderer 會替每個標籤設大 z-index，否則會浮在控制列之上 */
+      #label-root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
       #ui-root { position: absolute; inset: 0; pointer-events: none; }
       #ui-root > * { pointer-events: auto; }
     </style>
